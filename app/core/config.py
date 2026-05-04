@@ -24,6 +24,8 @@ DEFAULT_CORS_ORIGINS = [
     "https://innovate-x-niet.vercel.app",
 ]
 
+DEFAULT_CORS_ORIGIN_REGEX = r"^https://innovate-x-niet(?:-[a-z0-9-]+)?-jethin10s-projects\.vercel\.app$"
+
 
 def _cors_origins() -> list[str]:
     configured = _csv_env("CORS_ORIGINS", "")
@@ -79,7 +81,7 @@ def build_settings(overrides: dict[str, str] | None = None) -> Settings:
         "rapidapi_key": os.getenv("RAPIDAPI_KEY") or os.getenv("JSEARCH_API_KEY") or None,
         "jsearch_host": os.getenv("JSEARCH_HOST", "jsearch.p.rapidapi.com"),
         "cors_origins": _cors_origins(),
-        "cors_origin_regex": os.getenv("CORS_ORIGIN_REGEX") or None,
+        "cors_origin_regex": os.getenv("CORS_ORIGIN_REGEX") or DEFAULT_CORS_ORIGIN_REGEX,
     }
     if overrides:
         values.update(overrides)
