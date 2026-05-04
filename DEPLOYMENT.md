@@ -43,6 +43,8 @@ ADMIN_REGISTRATION_KEY=<strong random value>
 CORS_ORIGINS=https://your-frontend.vercel.app
 ```
 
+The included `render.yaml` uses SQLite on the free Render filesystem so the demo deploy works without a paid disk. This is fine for a hackathon demo, but data can reset on redeploys/restarts. For persistent production data, use Render Postgres or a paid service with a persistent disk and set `DATABASE_URL` accordingly.
+
 Optional integrations:
 
 ```env
@@ -79,4 +81,3 @@ After both services are live:
 2. Open the Vercel frontend URL.
 3. Run the demo flow that registers/logs in a student.
 4. Check roadmap, coding problems, resume analysis, trust score, and job matching.
-

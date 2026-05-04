@@ -6,10 +6,6 @@ services:
     buildCommand: pip install -e .
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
-    disk:
-      name: placement-trust-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
@@ -18,7 +14,7 @@ services:
       - key: DOCS_ENABLED
         value: "false"
       - key: DATABASE_URL
-        value: sqlite:////var/data/placement_trust.db
+        value: sqlite:///./placement_trust.db
       - key: MODEL_ARTIFACT_PATH
         value: artifacts/trust_model.joblib
       - key: AUTH_SECRET_KEY
@@ -39,4 +35,3 @@ services:
         sync: false
       - key: RAPIDAPI_KEY
         sync: false
-
