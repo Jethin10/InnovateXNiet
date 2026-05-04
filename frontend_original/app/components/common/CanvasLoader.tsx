@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { AdaptiveDpr, Preload, ScrollControls, useProgress, useScroll } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import gsap from "gsap";
+import Image from "next/image";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
 
@@ -109,6 +110,19 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
       <TrustFlowSceneOverlay />
       <ProductFeatureOverlay />
       <GateLoginOverlay />
+      <div
+        className="pointer-events-none fixed bottom-16 right-5 z-[80] h-28 w-28 select-none opacity-25 mix-blend-screen sm:bottom-8 sm:right-8 sm:h-36 sm:w-36"
+        aria-hidden="true"
+      >
+        <Image
+          src="/brand/rise-logo.png"
+          alt=""
+          width={320}
+          height={320}
+          priority
+          className="h-full w-full object-contain"
+        />
+      </div>
     </div>
   );
 };
