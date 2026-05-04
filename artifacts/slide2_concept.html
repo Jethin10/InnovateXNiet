@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trust-Led Placement Passport - Slide 2 Concept</title>
+  <style>
+    :root {
+      --bg: #f7f6f3;
+      --panel: #ffffff;
+      --ink: #161616;
+      --muted: #525252;
+      --brand: #1f4e8c;
+      --brand-soft: #e8f0fb;
+      --accent: #f47c20;
+      --accent-soft: #fff1e5;
+      --line: #d8d8d8;
+      --success: #1f7a5a;
+      --shadow: 0 18px 48px rgba(21, 31, 52, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #faf9f6 0%, #f2efe8 100%);
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+    }
+
+    .canvas {
+      width: 1600px;
+      height: 900px;
+      margin: 0 auto;
+      padding: 34px 42px 28px;
+      background:
+        radial-gradient(circle at top right, rgba(244, 124, 32, 0.08), transparent 18%),
+        radial-gradient(circle at bottom left, rgba(31, 78, 140, 0.08), transparent 20%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 180px 1fr 180px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .team-pill {
+      width: 128px;
+      min-height: 88px;
+      border: 3px solid #6d5aa4;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 26px;
+      line-height: 1.2;
+      color: #222;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .title-wrap {
+      text-align: center;
+      padding-top: 4px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #8f4e14;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .logo-mark {
+      justify-self: end;
+      width: 146px;
+      height: 146px;
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(244, 124, 32, 0.15), rgba(31, 78, 140, 0.08)),
+        #fff;
+      border: 1px solid rgba(244, 124, 32, 0.2);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+    }
+
+    .logo-mark span {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--brand);
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 0.58fr 0.42fr;
+      gap: 26px;
+      margin-top: 8px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(31, 78, 140, 0.08);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 28px 30px;
+    }
+
+    .panel h2 {
+      margin: 0 0 18px;
+      color: var(--brand);
+      font-size: 40px;
+      line-height: 1.05;
+    }
+
+    .lead {
+      font-size: 24px;
+      line-height: 1.45;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .section-label {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6c6c6c;
+      margin: 20px 0 10px;
+    }
+
+    .bullet-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .bullet-list li {
+      display: grid;
+      grid-template-columns: 14px 1fr;
+      gap: 12px;
+      align-items: start;
+      font-size: 21px;
+      line-height: 1.38;
+    }
+
+    .bullet-list li::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), #3d6bb0);
+      box-shadow: 0 0 0 5px rgba(31, 78, 140, 0.1);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .flow-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--brand);
+      margin-bottom: 18px;
+    }
+
+    .flow-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .flow-card {
+      position: relative;
+      padding: 16px 18px 16px 74px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid rgba(31, 78, 140, 0.12);
+    }
+
+    .flow-card::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--brand), #5d7fbc);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .flow-card h3 {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    .flow-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .connector {
+      width: 3px;
+      height: 22px;
+      margin: -2px auto;
+      background: linear-gradient(180deg, rgba(31, 78, 140, 0.25), rgba(244, 124, 32, 0.55));
+      border-radius: 999px;
+    }
+
+    .mini-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini {
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: #fff8f1;
+      border: 1px solid rgba(244, 124, 32, 0.22);
+    }
+
+    .mini h4 {
+      margin: 0 0 6px;
+      color: #8f4e14;
+      font-size: 18px;
+    }
+
+    .mini p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .highlight {
+      background: linear-gradient(135deg, #fff, #f7fafc);
+      border-radius: 22px;
+      border: 1px solid rgba(31, 78, 140, 0.1);
+      padding: 18px 20px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .highlight h3 {
+      margin: 0 0 6px;
+      color: var(--brand);
+      font-size: 24px;
+    }
+
+    .highlight p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 28px;
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="header">
+      <div class="team-pill">Your Team<br />Name</div>
+      <div class="title-wrap">
+        <div class="eyebrow">Slide 2 · Proposed Solution Vision</div>
+        <h1 class="title">TRUST-LED PLACEMENT PASSPORT</h1>
+        <p class="subtitle">Verified placement readiness, not self-claimed readiness</p>
+      </div>
+      <div class="logo-mark"><span>Trust<br />Stamp</span></div>
+    </div>
+
+    <div class="main">
+      <section class="panel">
+        <h2>Proposed Solution</h2>
+        <div class="lead">
+          An AI-powered placement readiness platform that verifies student skills through staged assessments and real evidence, then creates personalized roadmaps, recruiter trust profiles, and college-level analytics.
+        </div>
+
+        <div class="section-label">Detailed Explanation</div>
+        <ul class="bullet-list">
+          <li>Students upload a resume or enter their skills, target role, and dream company.</li>
+          <li>A 3-stage verification assessment checks actual skill depth using easy, medium, and hard questions with rising time limits.</li>
+          <li>The trust model analyzes correctness, time usage, confidence behavior, project proof, and coding-profile evidence.</li>
+          <li>The system generates a dynamic roadmap with resources, assignments, mini-projects, and proof-based progression.</li>
+          <li>Resume/ATS feedback, gamified progress, and leaderboard mechanics keep students motivated and visible.</li>
+        </ul>
+
+        <div class="section-label">Integrated Evidence Sources</div>
+        <div class="chip-row">
+          <div class="chip">Resume + Skills</div>
+          <div class="chip">LeetCode</div>
+          <div class="chip">Codeforces</div>
+          <div class="chip">GFG</div>
+          <div class="chip">Projects</div>
+          <div class="chip">Trust Stamp URL</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="flow-title">Product Flow</div>
+        <div class="flow-grid">
+          <div class="flow-card" data-step="1">
+            <h3>Resume / Skills Intake</h3>
+            <p>Resume upload or manual self-declared skill profile with target role and company.</p>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-card" data-step="2">
+            <h3>3-Stage Verification Test</h3>
+            <p>Easy to hard assessment with adaptive timing, confidence capture, and claim validation.</p>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-card" data-step="3">
+            <h3>Trust &amp; Readiness Scoring</h3>
+            <p>Detects actual level, evidence alignment, bluff risk, calibration gaps, and skill scores.</p>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-card" data-step="4">
+            <h3>Dynamic Roadmap Engine</h3>
+            <p>Builds node-based career paths with resources, assignments, proof checks, and unlock logic.</p>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-card" data-step="5">
+            <h3>Trust Stamp + Dashboards</h3>
+            <p>Recruiter-facing profile URL and institutional dashboard for cohort readiness and skill gaps.</p>
+          </div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini">
+            <h4>Students</h4>
+            <p>Know their true level and follow a guided path instead of blind preparation.</p>
+          </div>
+          <div class="mini">
+            <h4>Recruiters</h4>
+            <p>View evidence-backed candidate trust signals beyond a self-written resume.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="bottom">
+      <div class="highlight">
+        <h3>How It Solves The Problem</h3>
+        <p>Reduces blind prep, validates resume claims, gives colleges intervention visibility, and creates recruiter trust in candidate authenticity.</p>
+      </div>
+      <div class="highlight">
+        <h3>Innovation</h3>
+        <p>Combines assessment, trust scoring, roadmap generation, ATS guidance, and proof-based progression in one system.</p>
+      </div>
+      <div class="highlight">
+        <h3>Uniqueness</h3>
+        <p>Shared trust layer for students, recruiters, and institutions built around verified readiness rather than self-claimed readiness.</p>
+      </div>
+    </div>
+
+    <div class="footer"></div>
+  </div>
+</body>
+</html>

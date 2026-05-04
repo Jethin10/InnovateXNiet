@@ -1,0 +1,179 @@
+<svg width="420" height="980" viewBox="0 0 420 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#A84E00" flood-opacity="0.12"/>
+    </filter>
+
+    <style>
+      .title { font: 700 21px 'Segoe UI', Arial, sans-serif; fill: #111111; }
+      .stepno { font: 700 14px 'Segoe UI', Arial, sans-serif; fill: #111111; }
+      .step { font: 700 17px 'Segoe UI', Arial, sans-serif; fill: #111111; }
+      .label { font: 600 12px 'Segoe UI', Arial, sans-serif; fill: #3F3F46; }
+      .tiny { font: 700 11px 'Segoe UI', Arial, sans-serif; fill: #111111; }
+      .panel {
+        fill: #F8E3D1;
+        stroke: #FF7A00;
+        stroke-width: 2.2;
+      }
+      .panel-soft {
+        fill: #FFF6EF;
+        stroke: #FF9A40;
+        stroke-width: 2;
+      }
+      .chip {
+        fill: #FFF9F4;
+        stroke: #FF7A00;
+        stroke-width: 1.8;
+      }
+      .line {
+        stroke: #8F8F8F;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+      .dash {
+        stroke: #B5B5B5;
+        stroke-width: 2;
+        stroke-dasharray: 7 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+      .icon {
+        stroke: #A84E00;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+    </style>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M1 1L8 5L1 9" fill="none" stroke="#8F8F8F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- transparent background by default -->
+
+  <text x="210" y="34" text-anchor="middle" class="title">Verified Placement Journey</text>
+
+  <path d="M210 66V824" class="line" marker-end="url(#arrow)"/>
+
+  <!-- 1 -->
+  <circle cx="210" cy="66" r="17" fill="#FFFFFF" stroke="#FF7A00" stroke-width="2"/>
+  <text x="210" y="71" text-anchor="middle" class="stepno">1</text>
+  <rect x="120" y="94" width="180" height="58" rx="17" class="panel" filter="url(#softShadow)"/>
+  <text x="210" y="118" text-anchor="middle" class="step">Resume / Skills</text>
+  <text x="210" y="136" text-anchor="middle" class="label">resume upload or manual entry</text>
+  <path d="M142 109h14v22h20" class="icon"/>
+  <path d="M142 127h10" class="icon"/>
+  <path d="M142 136h18" class="icon"/>
+
+  <!-- 2 -->
+  <circle cx="210" cy="186" r="17" fill="#FFFFFF" stroke="#FF7A00" stroke-width="2"/>
+  <text x="210" y="191" text-anchor="middle" class="stepno">2</text>
+  <rect x="138" y="214" width="144" height="56" rx="17" class="panel" filter="url(#softShadow)"/>
+  <text x="210" y="237" text-anchor="middle" class="step">Role + Company</text>
+  <text x="210" y="255" text-anchor="middle" class="label">target path and fit</text>
+  <circle cx="159" cy="241" r="9" fill="#FFF9F4" stroke="#FF7A00" stroke-width="1.6"/>
+  <path d="M159 235v12M153 241h12" class="icon"/>
+
+  <!-- 3 -->
+  <circle cx="210" cy="306" r="17" fill="#FFFFFF" stroke="#FF7A00" stroke-width="2"/>
+  <text x="210" y="311" text-anchor="middle" class="stepno">3</text>
+  <text x="210" y="350" text-anchor="middle" class="step">3-Stage Test</text>
+
+  <rect x="22" y="372" width="100" height="44" rx="14" class="panel-soft" filter="url(#softShadow)"/>
+  <text x="72" y="391" text-anchor="middle" class="tiny">Easy</text>
+  <text x="72" y="406" text-anchor="middle" class="label">basics</text>
+
+  <rect x="160" y="372" width="100" height="44" rx="14" class="panel-soft" filter="url(#softShadow)"/>
+  <text x="210" y="391" text-anchor="middle" class="tiny">Medium</text>
+  <text x="210" y="406" text-anchor="middle" class="label">application</text>
+
+  <rect x="298" y="372" width="100" height="44" rx="14" class="panel-soft" filter="url(#softShadow)"/>
+  <text x="348" y="391" text-anchor="middle" class="tiny">Hard</text>
+  <text x="348" y="406" text-anchor="middle" class="label">depth</text>
+
+  <path d="M72 416C72 446 160 462 210 462" class="dash"/>
+  <path d="M210 416V462" class="dash"/>
+  <path d="M348 416C348 446 260 462 210 462" class="dash"/>
+
+  <!-- 4 -->
+  <circle cx="210" cy="462" r="17" fill="#FFFFFF" stroke="#FF7A00" stroke-width="2"/>
+  <text x="210" y="467" text-anchor="middle" class="stepno">4</text>
+
+  <rect x="128" y="494" width="164" height="72" rx="18" class="panel" filter="url(#softShadow)"/>
+  <text x="210" y="518" text-anchor="middle" class="step">AI Evaluation</text>
+  <text x="210" y="537" text-anchor="middle" class="label">actual level + claim check</text>
+  <text x="210" y="554" text-anchor="middle" class="label">confidence + skill gaps</text>
+
+  <!-- evidence badges -->
+  <circle cx="38" cy="514" r="15" class="chip"/>
+  <text x="38" y="518" text-anchor="middle" class="tiny">CF</text>
+  <circle cx="38" cy="552" r="15" class="chip"/>
+  <text x="38" y="556" text-anchor="middle" class="tiny">LC</text>
+  <circle cx="38" cy="590" r="15" class="chip"/>
+  <text x="38" y="594" text-anchor="middle" class="tiny">PJ</text>
+
+  <path d="M53 514C82 514 89 520 128 520" class="dash" marker-end="url(#arrow)"/>
+  <path d="M53 552C82 552 89 540 128 540" class="dash" marker-end="url(#arrow)"/>
+  <path d="M53 590C82 590 89 560 128 560" class="dash" marker-end="url(#arrow)"/>
+
+  <!-- 5 -->
+  <circle cx="210" cy="620" r="17" fill="#FFFFFF" stroke="#FF7A00" stroke-width="2"/>
+  <text x="210" y="625" text-anchor="middle" class="stepno">5</text>
+
+  <rect x="132" y="652" width="156" height="72" rx="18" class="panel" filter="url(#softShadow)"/>
+  <text x="210" y="676" text-anchor="middle" class="step">Roadmap</text>
+  <text x="210" y="695" text-anchor="middle" class="label">resources + assignments</text>
+  <text x="210" y="712" text-anchor="middle" class="label">projects + proof unlocks</text>
+
+  <!-- roadmap icon -->
+  <path d="M152 677h18M161 668v18" class="icon"/>
+  <circle cx="182" cy="677" r="4" fill="#FF7A00"/>
+  <circle cx="192" cy="688" r="4" fill="#FF9A40"/>
+  <circle cx="202" cy="699" r="4" fill="#FFB56E"/>
+
+  <!-- 6 -->
+  <circle cx="210" cy="778" r="17" fill="#FFFFFF" stroke="#FF7A00" stroke-width="2"/>
+  <text x="210" y="783" text-anchor="middle" class="stepno">6</text>
+  <text x="210" y="822" text-anchor="middle" class="step">Outcomes</text>
+
+  <rect x="10" y="844" width="118" height="44" rx="14" class="panel-soft" filter="url(#softShadow)"/>
+  <text x="69" y="863" text-anchor="middle" class="tiny">Trust Stamp</text>
+  <text x="69" y="878" text-anchor="middle" class="label">verified URL</text>
+
+  <rect x="151" y="844" width="118" height="44" rx="14" class="panel-soft" filter="url(#softShadow)"/>
+  <text x="210" y="863" text-anchor="middle" class="tiny">ATS Guide</text>
+  <text x="210" y="878" text-anchor="middle" class="label">resume fixes</text>
+
+  <rect x="292" y="844" width="118" height="44" rx="14" class="panel-soft" filter="url(#softShadow)"/>
+  <text x="351" y="863" text-anchor="middle" class="tiny">Leaderboard</text>
+  <text x="351" y="878" text-anchor="middle" class="label">progress tracking</text>
+
+  <!-- small vector platform marks -->
+  <g transform="translate(10 926)">
+    <text x="0" y="0" class="label">Signals:</text>
+    <!-- Codeforces dots -->
+    <g transform="translate(54 -10)">
+      <rect x="0" y="10" width="8" height="18" rx="2" fill="#FFB547"/>
+      <rect x="11" y="4" width="8" height="24" rx="2" fill="#FF7A00"/>
+      <rect x="22" y="14" width="8" height="14" rx="2" fill="#E05A00"/>
+    </g>
+    <!-- LeetCode-ish mark -->
+    <g transform="translate(98 -2)">
+      <path d="M18 3L8 13L18 23" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11 13H28" stroke="#111111" stroke-width="3" stroke-linecap="round"/>
+      <path d="M23 3L28 8" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <!-- Project / Git branch icon -->
+    <g transform="translate(142 4)">
+      <circle cx="6" cy="6" r="4" stroke="#111111" stroke-width="2" fill="none"/>
+      <circle cx="24" cy="6" r="4" stroke="#111111" stroke-width="2" fill="none"/>
+      <circle cx="24" cy="22" r="4" stroke="#111111" stroke-width="2" fill="none"/>
+      <path d="M10 6H20M24 10V18" stroke="#111111" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

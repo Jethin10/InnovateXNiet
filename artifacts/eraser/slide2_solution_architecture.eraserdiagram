@@ -1,0 +1,59 @@
+direction right
+colorMode pastel
+styleMode shadow
+typeface clean
+
+Students [icon: user, color: blue]
+Recruiters [icon: user, color: orange]
+College_Admins [label: "College Admins / Mentors", icon: user, color: violet]
+
+Inputs [icon: file, color: blue] {
+  Resume_Upload [label: "Resume Upload", icon: file]
+  Manual_Skills [label: "Manual Skill Entry", icon: clipboard]
+  Target_Role [label: "Target Role + Company", icon: target]
+  Coding_Profiles [label: "LeetCode / Codeforces / GFG", icon: code]
+  Projects [label: "Projects + Proof", icon: folder]
+}
+
+Trust_Platform [icon: sparkles, color: orange] {
+  Intake [label: "Claim & Profile Intake", icon: file]
+  Assessment [label: "3-Stage Verification Test", icon: list]
+  Trust_Model [label: "Trust + Readiness Scoring", icon: brain]
+  Roadmap_Engine [label: "Dynamic Roadmap Engine", icon: route]
+  Resume_ATS [label: "ATS + Resume Guidance", icon: check-circle]
+  Gamification [label: "Leaderboard + Progress", icon: trophy]
+}
+
+Outputs [icon: monitor, color: green] {
+  Student_View [label: "Student Dashboard", icon: monitor]
+  Trust_Stamp [label: "Trust Stamp URL", icon: shield]
+  Recruiter_View [label: "Recruiter Verification View", icon: search]
+  College_Dashboard [label: "Institution Dashboard", icon: bar-chart-3]
+}
+
+Students > Resume_Upload, Manual_Skills, Target_Role
+Students > Coding_Profiles, Projects
+Resume_Upload, Manual_Skills, Target_Role, Coding_Profiles, Projects > Intake
+Intake > Assessment: "claim verification"
+Assessment > Trust_Model: "performance + time + confidence"
+Coding_Profiles, Projects > Trust_Model: "external evidence"
+Trust_Model > Roadmap_Engine: "skill gaps + readiness"
+Trust_Model > Resume_ATS: "evidence-backed fixes"
+Trust_Model > Gamification: "progress state"
+
+Roadmap_Engine > Student_View
+Resume_ATS > Student_View
+Gamification > Student_View
+Trust_Model > Trust_Stamp
+Trust_Stamp > Recruiter_View
+Trust_Model > College_Dashboard
+Roadmap_Engine > College_Dashboard
+
+Recruiters > Recruiter_View
+College_Admins > College_Dashboard
+
+legend [position: bottom-left] {
+  [shape: rectangle, color: blue, label: "Inputs and evidence"]
+  [shape: rectangle, color: orange, label: "Core trust platform"]
+  [shape: rectangle, color: green, label: "User-facing outputs"]
+}

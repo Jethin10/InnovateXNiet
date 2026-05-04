@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="slide2-user-flow" name="Slide 2 User Flow">
+    <mxGraphModel dx="1414" dy="897" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="340" pageHeight="980" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;labelBackgroundColor=none;fontColor=none;noLabel=1;" value="Verified Placement Journey" vertex="1">
+          <mxGeometry height="24" width="200" x="70" y="12" as="geometry" />
+        </mxCell>
+        <mxCell id="line1" edge="1" parent="1" source="a1" style="endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#8F8F8F;" target="a6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFFFFF;fontStyle=1;fontSize=13;fontColor=#111111;" value="1" vertex="1">
+          <mxGeometry height="34" width="34" x="150" y="54" as="geometry" />
+        </mxCell>
+        <mxCell id="b1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;strokeColor=#F97316;fillColor=#F8E3D1;fontSize=13;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="&lt;b&gt;Resume / Skills&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;resume upload or manual claim entry&lt;/font&gt;" vertex="1">
+          <mxGeometry height="58" width="190" x="72" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFFFFF;fontStyle=1;fontSize=13;fontColor=#111111;" value="2" vertex="1">
+          <mxGeometry height="34" width="34" x="150" y="184" as="geometry" />
+        </mxCell>
+        <mxCell id="b2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;strokeColor=#F97316;fillColor=#FFF1E7;fontSize=13;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="&lt;b&gt;Role + Company&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;target path and recruiter fit&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="150" x="92" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFFFFF;fontStyle=1;fontSize=13;fontColor=#111111;" value="3" vertex="1">
+          <mxGeometry height="34" width="34" x="150" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="stageTitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#111111;" value="&lt;b&gt;3-Stage Test&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="120" x="110" y="352" as="geometry" />
+        </mxCell>
+        <mxCell id="easy" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;strokeColor=#F59E0B;fillColor=#FFF7E6;fontSize=12;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="Easy&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;basics&lt;/font&gt;" vertex="1">
+          <mxGeometry height="42" width="86" x="18" y="386" as="geometry" />
+        </mxCell>
+        <mxCell id="med" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;strokeColor=#FB923C;fillColor=#FFF1E7;fontSize=12;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="Medium&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;application&lt;/font&gt;" vertex="1">
+          <mxGeometry height="42" width="86" x="127" y="386" as="geometry" />
+        </mxCell>
+        <mxCell id="hard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;strokeColor=#EA580C;fillColor=#FFEAD9;fontSize=12;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="Hard&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;depth&lt;/font&gt;" vertex="1">
+          <mxGeometry height="42" width="86" x="236" y="386" as="geometry" />
+        </mxCell>
+        <mxCell id="mergeL" edge="1" parent="1" source="easy" style="endArrow=none;strokeWidth=2;dashed=1;dashPattern=6 6;strokeColor=#B5B5B5;" target="a4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mergeM" edge="1" parent="1" source="med" style="endArrow=none;strokeWidth=2;dashed=1;dashPattern=6 6;strokeColor=#B5B5B5;" target="a4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mergeH" edge="1" parent="1" source="hard" style="endArrow=none;strokeWidth=2;dashed=1;dashPattern=6 6;strokeColor=#B5B5B5;" target="a4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFFFFF;fontStyle=1;fontSize=13;fontColor=#111111;" value="4" vertex="1">
+          <mxGeometry height="34" width="34" x="150" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="b4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;strokeColor=#F97316;fillColor=#F8E3D1;fontSize=13;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="&lt;b&gt;AI Evaluation&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;actual level + confidence calibration + claim check + skill gaps&lt;/font&gt;" vertex="1">
+          <mxGeometry height="64" width="190" x="72" y="516" as="geometry" />
+        </mxCell>
+        <mxCell id="ev1" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFF7ED;fontSize=11;fontStyle=1;fontColor=#111111;" value="CF" vertex="1">
+          <mxGeometry height="28" width="28" x="18" y="516" as="geometry" />
+        </mxCell>
+        <mxCell id="ev2" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFF7ED;fontSize=11;fontStyle=1;fontColor=#111111;" value="LC" vertex="1">
+          <mxGeometry height="28" width="28" x="18" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="ev3" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFF7ED;fontSize=11;fontStyle=1;fontColor=#111111;" value="PJ" vertex="1">
+          <mxGeometry height="28" width="28" x="18" y="584" as="geometry" />
+        </mxCell>
+        <mxCell id="eLine1" edge="1" parent="1" source="ev1" style="endArrow=block;endFill=1;strokeWidth=1.8;dashed=1;dashPattern=5 5;strokeColor=#B5B5B5;" target="b4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eLine2" edge="1" parent="1" source="ev2" style="endArrow=block;endFill=1;strokeWidth=1.8;dashed=1;dashPattern=5 5;strokeColor=#B5B5B5;" target="b4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eLine3" edge="1" parent="1" source="ev3" style="endArrow=block;endFill=1;strokeWidth=1.8;dashed=1;dashPattern=5 5;strokeColor=#B5B5B5;" target="b4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFFFFF;fontStyle=1;fontSize=13;fontColor=#111111;" value="5" vertex="1">
+          <mxGeometry height="34" width="34" x="150" y="612" as="geometry" />
+        </mxCell>
+        <mxCell id="b5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;strokeColor=#F97316;fillColor=#F8E3D1;fontSize=13;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="&lt;b&gt;Roadmap&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;resources + assignments + projects + proof unlocks&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="170" x="82" y="658" as="geometry" />
+        </mxCell>
+        <mxCell id="a6" parent="1" style="ellipse;html=1;aspect=fixed;strokeColor=#F97316;fillColor=#FFFFFF;fontStyle=1;fontSize=13;fontColor=#111111;" value="6" vertex="1">
+          <mxGeometry height="34" width="34" x="150" y="748" as="geometry" />
+        </mxCell>
+        <mxCell id="outTitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#111111;" value="&lt;b&gt;Outcomes&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="100" x="122" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="trust" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;strokeColor=#F97316;fillColor=#F8E3D1;fontSize=12;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="Trust Stamp&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;verified URL&lt;/font&gt;" vertex="1">
+          <mxGeometry height="42" width="100" x="8" y="824" as="geometry" />
+        </mxCell>
+        <mxCell id="ats" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;strokeColor=#F97316;fillColor=#FFF3E8;fontSize=12;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="ATS Guide&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;resume fixes&lt;/font&gt;" vertex="1">
+          <mxGeometry height="42" width="100" x="120" y="824" as="geometry" />
+        </mxCell>
+        <mxCell id="prog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=14;strokeColor=#F97316;fillColor=#FFF8F2;fontSize=12;fontStyle=1;fontColor=#111111;align=center;verticalAlign=middle;shadow=1;" value="Leaderboard&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;progress tracking&lt;/font&gt;" vertex="1">
+          <mxGeometry height="42" width="100" x="232" y="824" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

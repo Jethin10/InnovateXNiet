@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+next-env.d.ts
+*.tsbuildinfo
+
+# Environment and deploy state
+.env
+.env.*
+!.env.example
+!.env.local.example
+.vercel/
+.git.frontend-backup/
+frontend_original/.git.frontend-backup/
+
+# Local runtime data
+*.db
+*.sqlite
+*.sqlite3
+*.log
+test-results/
+tmp/
+.playwright-mcp/
+
+# Generated media and bulky local artifacts
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mov
+*.pptx
+*.pdf
+
+# Keep frontend runtime assets that are referenced by the app.
+!frontend_original/app/opengraph-image.png
+!frontend_original/public/tile.png
+!frontend_original/public/tile-wide.png
+!frontend_original/public/favicon-16x16.png
+!frontend_original/public/favicon-32x32.png
+!frontend_original/public/*.pdf
+
+# Vendored/reference repos not needed for deployment
+external/
+
+# Presentation/debug artifacts not needed by the deployed app
+ppt/
+artifacts/ppt_inspect/
+artifacts/ppt_inspect.zip
+artifacts/wanderer_textures/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/

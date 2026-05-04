@@ -1,0 +1,54 @@
+direction down
+colorMode pastel
+styleMode shadow
+typeface clean
+
+Student_Start [label: "Student starts journey", icon: user, color: blue]
+Resume_or_Skills [label: "Uploads resume or enters skills", icon: file, color: blue]
+Choose_Goal [label: "Chooses target role + company", icon: target, color: blue]
+
+Easy_Test [label: "Easy round", icon: circle, color: orange]
+Medium_Test [label: "Medium round", icon: circle, color: orange]
+Hard_Test [label: "Hard round", icon: circle, color: orange]
+
+Actual_Level [label: "Actual level identified", icon: chart-column, color: violet]
+Claim_Check [label: "Claims vs proof checked", icon: shield-check, color: violet]
+Skill_Gaps [label: "Skill gaps detected", icon: search, color: violet]
+
+Roadmap [label: "Personalized roadmap generated", icon: route, color: green]
+Assignments [label: "Assignments + mini projects", icon: folder, color: green]
+Proof_Unlocks [label: "Progress unlocks after proof", icon: check-circle, color: green]
+
+Trust_Stamp [label: "Trust Stamp profile", icon: shield, color: orange]
+ATS_Guide [label: "Resume / ATS suggestions", icon: file-check, color: orange]
+Leaderboard [label: "Progress + leaderboard", icon: trophy, color: orange]
+
+Coding_Profiles [label: "LeetCode / Codeforces / GFG", icon: code, color: blue]
+Project_Proof [label: "Projects + proof of work", icon: github, color: blue]
+
+Recruiter_Value [label: "Recruiters see verified candidates", icon: briefcase, color: green]
+College_Value [label: "Colleges monitor readiness + weak skills", icon: school, color: green]
+
+Student_Start > Resume_or_Skills
+Resume_or_Skills > Choose_Goal
+Choose_Goal > Easy_Test
+Easy_Test > Medium_Test
+Medium_Test > Hard_Test
+Hard_Test > Actual_Level
+Actual_Level > Claim_Check
+Claim_Check > Skill_Gaps
+Skill_Gaps > Roadmap
+Roadmap > Assignments
+Assignments > Proof_Unlocks
+Proof_Unlocks > Trust_Stamp
+Trust_Stamp > ATS_Guide
+ATS_Guide > Leaderboard
+
+Coding_Profiles --> Claim_Check: "evidence"
+Project_Proof --> Claim_Check: "proof"
+Coding_Profiles --> Skill_Gaps: "performance signals"
+Project_Proof --> Roadmap: "project depth"
+
+Trust_Stamp > Recruiter_Value
+Leaderboard > College_Value
+Roadmap > College_Value: "cohort gap view"

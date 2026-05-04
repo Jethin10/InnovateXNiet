@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Slide 2 — Proposed Solution</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f14;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #fff;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    grid-template-rows: 60px 1fr 72px;
+  }
+
+  /* HEADER */
+  .header {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px;
+  }
+  .header .logo { color: #fff; font-size: 12px; font-weight: 600; opacity: .7; }
+  .header h1 { color: #fff; font-size: 20px; font-weight: 800; letter-spacing: 1px; }
+  .header .slide-num { color: #fff; font-size: 11px; font-weight: 600; background: rgba(255,255,255,.15); padding: 3px 12px; border-radius: 20px; }
+
+  /* LEFT */
+  .left {
+    padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 8px;
+    border-right: 2px solid #f0f0f5;
+  }
+  .hook {
+    background: linear-gradient(135deg, #ff4757, #ff6b81);
+    color: #fff; padding: 8px 12px; border-radius: 10px;
+    font-size: 11px; font-weight: 600; line-height: 1.3; text-align: center;
+  }
+  .hook .big { font-size: 26px; font-weight: 900; display: block; }
+
+  .fc {
+    background: #f8f9ff; border-radius: 8px; padding: 7px 10px;
+    border-left: 4px solid; display: flex; gap: 8px; align-items: flex-start;
+  }
+  .fc:nth-child(2) { border-color: #6c5ce7; }
+  .fc:nth-child(3) { border-color: #00b894; }
+  .fc:nth-child(4) { border-color: #fdcb6e; }
+  .fc:nth-child(5) { border-color: #0984e3; }
+  .fc .ico { font-size: 18px; flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 6px; }
+  .fc h3 { font-size: 10px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 1px; }
+  .fc p { font-size: 9.5px; color: #555; line-height: 1.35; font-weight: 500; }
+  .fc p strong { color: #1a1a2e; font-weight: 700; }
+
+  .diff {
+    background: rgba(108,92,231,.08); border: 1px solid #6c5ce7; border-radius: 6px;
+    padding: 4px 8px; font-size: 8.5px; font-weight: 700; color: #6c5ce7; text-align: center;
+  }
+
+  /* RIGHT */
+  .right {
+    padding: 10px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    background: #fafbff;
+  }
+  .slabel { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #6c5ce7; text-align: center; }
+
+  .flow { flex: 1; display: flex; flex-direction: column; gap: 5px; justify-content: center; }
+  .frow { display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .fn {
+    background: #fff; border: 1.5px solid #e0e0ee; border-radius: 10px;
+    padding: 5px 8px; text-align: center; min-width: 100px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  }
+  .fn .ni { font-size: 16px; }
+  .fn .nt { font-size: 8.5px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; }
+  .fn .nd { font-size: 7.5px; color: #777; font-weight: 500; }
+  .fn.pri { background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-color: #6c5ce7; }
+  .fn.pri .nt, .fn.pri .nd { color: #fff; }
+  .fn.suc { background: linear-gradient(135deg, #00b894, #55efc4); border-color: #00b894; }
+  .fn.suc .nt, .fn.suc .nd { color: #fff; }
+  .fn.inf { background: linear-gradient(135deg, #0984e3, #74b9ff); border-color: #0984e3; }
+  .fn.inf .nt, .fn.inf .nd { color: #fff; }
+  .fn.dan { background: linear-gradient(135deg, #d63031, #ff7675); border-color: #d63031; }
+  .fn.dan .nt, .fn.dan .nd { color: #fff; }
+
+  .arr { font-size: 14px; color: #b0b0cc; font-weight: 900; flex-shrink: 0; }
+  .arrd { text-align: center; font-size: 14px; color: #b0b0cc; font-weight: 900; }
+
+  .arow {
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    background: #fff; border: 1.5px solid #6c5ce7; border-radius: 10px;
+    padding: 6px 10px; position: relative;
+  }
+  .arow::before {
+    content: '3-STAGE ADAPTIVE ASSESSMENT (IRT)';
+    position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+    background: #6c5ce7; color: #fff; font-size: 7px; font-weight: 800;
+    padding: 2px 8px; border-radius: 8px; letter-spacing: .5px; white-space: nowrap;
+  }
+  .stg { text-align: center; padding: 3px 8px; border-radius: 6px; min-width: 72px; }
+  .stg-e { background: #dfe6e9; }
+  .stg-m { background: #ffeaa7; }
+  .stg-h { background: #fab1a0; }
+  .stg .sl { font-size: 8px; font-weight: 800; text-transform: uppercase; color: #2d3436; }
+  .stg .st { font-size: 7px; color: #636e72; font-weight: 600; }
+  .sa { color: #b0b0cc; font-weight: 900; font-size: 12px; }
+
+  .orow { display: flex; justify-content: center; gap: 8px; }
+  .oc {
+    text-align: center; padding: 6px 8px; border-radius: 8px;
+    min-width: 95px; border: 1.5px solid;
+  }
+  .oc .oi { font-size: 18px; }
+  .oc .ot { font-size: 8px; font-weight: 800; text-transform: uppercase; margin-top: 1px; }
+  .oc .od { font-size: 7px; color: #777; font-weight: 500; }
+  .oc-t { border-color: #00b894; background: #f0fff4; } .oc-t .ot { color: #00b894; }
+  .oc-r { border-color: #0984e3; background: #f0f8ff; } .oc-r .ot { color: #0984e3; }
+  .oc-s { border-color: #6c5ce7; background: #f5f3ff; } .oc-s .ot { color: #6c5ce7; }
+  .oc-d { border-color: #fdcb6e; background: #fffef0; } .oc-d .ot { color: #e17055; }
+
+  /* BOTTOM */
+  .bottom {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    display: flex; align-items: center; justify-content: space-around; padding: 0 30px;
+  }
+  .sh { display: flex; align-items: center; gap: 8px; color: #fff; }
+  .sh .si { font-size: 24px; }
+  .sh h4 { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+  .sh p { font-size: 8px; opacity: .7; font-weight: 500; }
+  .dv { width: 1px; height: 40px; background: rgba(255,255,255,.2); }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="header">
+    <div class="logo">INNOVATE X NIET</div>
+    <h1>❖ PROPOSED SOLUTION</h1>
+    <div class="slide-num">2 / 6</div>
+  </div>
+
+  <div class="left">
+    <div class="hook">
+      <span class="big">87%</span>
+      of Indian job seekers use AI to fabricate resumes.<br>Recruiters can't trust what they read.
+    </div>
+    <div class="fc">
+      <div class="ico">🔍</div>
+      <div>
+        <h3>Claim → Verify → Prove</h3>
+        <p>Upload resume OR fill skills → AI generates a <strong>3-stage adaptive test</strong> using IRT to find <strong>real level</strong> & detect <strong>overconfidence</strong></p>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="ico">🛡️</div>
+      <div>
+        <h3>Trust Stamp URL</h3>
+        <p>A <strong>verifiable profile link</strong> on your resume — recruiters click & see <strong>evidence-backed scores</strong>, not self-reported claims</p>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="ico">🗺️</div>
+      <div>
+        <h3>Gated AI Roadmap</h3>
+        <p>Role-specific <strong>skill tree</strong> with resources, assignments & <strong>proof gates</strong>. Progress only when you prove mastery.</p>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="ico">🏫</div>
+      <div>
+        <h3>Institutional Dashboard</h3>
+        <p>College admins see <strong>cohort skill gaps</strong>, bluff-risk heatmaps & <strong>placement readiness</strong> analytics in real-time</p>
+      </div>
+    </div>
+    <div class="diff">✦ We don't teach content — we VERIFY skills & BUILD trust</div>
+  </div>
+
+  <div class="right">
+    <div class="slabel">Product Flow — How It Works</div>
+    <div class="flow">
+      <!-- Input -->
+      <div class="frow">
+        <div class="fn"><div class="ni">📄</div><div class="nt">Resume Upload</div><div class="nd">Parse claimed skills</div></div>
+        <span class="arr">OR</span>
+        <div class="fn"><div class="ni">✍️</div><div class="nt">Manual Input</div><div class="nd">Fill skill inventory</div></div>
+        <span class="arr">+</span>
+        <div class="fn"><div class="ni">🎯</div><div class="nt">Target Role</div><div class="nd">SDE / AI-ML / etc</div></div>
+      </div>
+      <div class="arrd">▼</div>
+      <!-- Assessment -->
+      <div class="arow">
+        <div class="stg stg-e"><div class="sl">🟢 Easy</div><div class="st">5 min</div></div>
+        <span class="sa">→</span>
+        <div class="stg stg-m"><div class="sl">🟡 Medium</div><div class="st">10 min</div></div>
+        <span class="sa">→</span>
+        <div class="stg stg-h"><div class="sl">🔴 Hard</div><div class="st">15 min</div></div>
+        <span class="arr" style="margin-left:6px">→</span>
+        <div class="fn dan" style="min-width:85px"><div class="nt">AI Analysis</div><div class="nd">Time · Confidence · Stability</div></div>
+      </div>
+      <div class="arrd">▼</div>
+      <!-- ML Engine -->
+      <div class="frow">
+        <div class="fn pri" style="min-width:120px"><div class="ni">🧠</div><div class="nt">ML Trust Engine</div><div class="nd">IRT + XGBoost Scoring</div></div>
+        <span class="arr">←</span>
+        <div class="fn" style="min-width:120px"><div class="ni">🔗</div><div class="nt">External Evidence</div><div class="nd">Codeforces · LeetCode · GFG</div></div>
+      </div>
+      <div class="arrd">▼</div>
+      <!-- Outputs -->
+      <div class="orow">
+        <div class="oc oc-t"><div class="oi">📊</div><div class="ot">Trust Score</div><div class="od">Readiness + Bluff Index</div></div>
+        <div class="oc oc-r"><div class="oi">🗺️</div><div class="ot">Gated Roadmap</div><div class="od">Nodes → Resources → Proof</div></div>
+        <div class="oc oc-s"><div class="oi">🛡️</div><div class="ot">Trust Stamp</div><div class="od">Shareable verified URL</div></div>
+        <div class="oc oc-d"><div class="oi">🏫</div><div class="ot">College View</div><div class="od">Cohort gap analytics</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="sh"><div class="si">👨‍🎓</div><div><h4>Students</h4><p>Know real level · Follow proven path · Earn trust</p></div></div>
+    <div class="dv"></div>
+    <div class="sh"><div class="si">👩‍💼</div><div><h4>Recruiters</h4><p>1-click verified profiles · Eliminate resume fraud</p></div></div>
+    <div class="dv"></div>
+    <div class="sh"><div class="si">🏛️</div><div><h4>Colleges</h4><p>Cohort readiness · Skill gap heatmaps · Intervene early</p></div></div>
+  </div>
+</div>
+</body>
+</html>

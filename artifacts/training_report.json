@@ -1,0 +1,1302 @@
+{
+  "champion_model": "gradient_boosting",
+  "champion_metrics": {
+    "candidate_name": "gradient_boosting",
+    "accuracy": 0.989526,
+    "roc_auc": 0.999424,
+    "brier_score": 0.02034,
+    "log_loss": 0.107556,
+    "f1": 0.989217
+  },
+  "dataset_size": 2196,
+  "feature_names": [
+    "accuracy_overall",
+    "weighted_accuracy",
+    "avg_time_ratio",
+    "confidence_mean",
+    "confidence_calibration_gap",
+    "overconfidence_rate",
+    "underconfidence_rate",
+    "answer_change_rate",
+    "resume_claim_alignment",
+    "resume_claim_inflation",
+    "project_evidence_strength",
+    "codeforces_rating_normalized",
+    "leetcode_solved_normalized",
+    "external_evidence_score",
+    "stage_progression_drop",
+    "confidence_correct_delta",
+    "confidence_volatility",
+    "accuracy_easy",
+    "accuracy_medium",
+    "accuracy_hard",
+    "skill_score_dsa",
+    "skill_score_fundamentals",
+    "skill_score_projects",
+    "target_role_dsa_weight",
+    "target_role_fundamentals_weight",
+    "target_role_projects_weight",
+    "target_role_fit_proxy",
+    "role_is_full_stack",
+    "role_is_backend",
+    "role_is_ai_ml"
+  ],
+  "feature_importances": [
+    [
+      "weighted_accuracy",
+      0.269796
+    ],
+    [
+      "resume_claim_inflation",
+      0.216721
+    ],
+    [
+      "codeforces_rating_normalized",
+      0.172493
+    ],
+    [
+      "accuracy_hard",
+      0.10707
+    ],
+    [
+      "answer_change_rate",
+      0.093537
+    ],
+    [
+      "confidence_mean",
+      0.047161
+    ],
+    [
+      "avg_time_ratio",
+      0.044403
+    ],
+    [
+      "skill_score_fundamentals",
+      0.034103
+    ],
+    [
+      "confidence_volatility",
+      0.00585
+    ],
+    [
+      "accuracy_overall",
+      0.001875
+    ]
+  ],
+  "external_examples": 1044,
+  "suite_summary": {
+    "total_runs": 12,
+    "candidate_win_counts": {
+      "gradient_boosting": 12
+    },
+    "candidate_aggregate": {
+      "gradient_boosting": {
+        "runs": 12,
+        "win_count": 12,
+        "average_accuracy": 0.988401,
+        "average_roc_auc": 0.99899,
+        "average_brier_score": 0.01769,
+        "average_log_loss": 0.096043,
+        "average_f1": 0.987871
+      },
+      "hist_gradient_boosting": {
+        "runs": 12,
+        "win_count": 0,
+        "average_accuracy": 0.987637,
+        "average_roc_auc": 0.998557,
+        "average_brier_score": 0.019412,
+        "average_log_loss": 0.106291,
+        "average_f1": 0.987037
+      },
+      "soft_voting_ensemble": {
+        "runs": 12,
+        "win_count": 0,
+        "average_accuracy": 0.988459,
+        "average_roc_auc": 0.998133,
+        "average_brier_score": 0.014554,
+        "average_log_loss": 0.076865,
+        "average_f1": 0.987905
+      },
+      "xgboost": {
+        "runs": 12,
+        "win_count": 0,
+        "average_accuracy": 0.98954,
+        "average_roc_auc": 0.998046,
+        "average_brier_score": 0.021878,
+        "average_log_loss": 0.124945,
+        "average_f1": 0.989031
+      },
+      "random_forest": {
+        "runs": 12,
+        "win_count": 0,
+        "average_accuracy": 0.984189,
+        "average_roc_auc": 0.997744,
+        "average_brier_score": 0.016053,
+        "average_log_loss": 0.078362,
+        "average_f1": 0.983493
+      },
+      "extra_trees": {
+        "runs": 12,
+        "win_count": 0,
+        "average_accuracy": 0.977831,
+        "average_roc_auc": 0.996782,
+        "average_brier_score": 0.021533,
+        "average_log_loss": 0.092852,
+        "average_f1": 0.976709
+      },
+      "logistic_regression": {
+        "runs": 12,
+        "win_count": 0,
+        "average_accuracy": 0.936347,
+        "average_roc_auc": 0.982906,
+        "average_brier_score": 0.060505,
+        "average_log_loss": 0.222668,
+        "average_f1": 0.93247
+      }
+    },
+    "focused_model": null,
+    "use_gpu": true
+  },
+  "suite_reports": [
+    {
+      "samples_per_variant": 24,
+      "seed": 11,
+      "dataset_size": 1332,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.984985,
+        "roc_auc": 0.997848,
+        "brier_score": 0.022069,
+        "log_loss": 0.120626,
+        "f1": 0.984127
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.41388
+        ],
+        [
+          "accuracy_hard",
+          0.330042
+        ],
+        [
+          "answer_change_rate",
+          0.066301
+        ],
+        [
+          "resume_claim_inflation",
+          0.041989
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.037076
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.984985,
+          "roc_auc": 0.997848,
+          "brier_score": 0.022069,
+          "log_loss": 0.120626,
+          "f1": 0.984127
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.982733,
+          "roc_auc": 0.997531,
+          "brier_score": 0.018787,
+          "log_loss": 0.100676,
+          "f1": 0.981789
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.983483,
+          "roc_auc": 0.996961,
+          "brier_score": 0.015728,
+          "log_loss": 0.077399,
+          "f1": 0.982595
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.98048,
+          "roc_auc": 0.996871,
+          "brier_score": 0.017344,
+          "log_loss": 0.075879,
+          "f1": 0.97956
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.984234,
+          "roc_auc": 0.99683,
+          "brier_score": 0.024496,
+          "log_loss": 0.138445,
+          "f1": 0.983347
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.977477,
+          "roc_auc": 0.995246,
+          "brier_score": 0.022684,
+          "log_loss": 0.096394,
+          "f1": 0.976266
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.933183,
+          "roc_auc": 0.979611,
+          "brier_score": 0.054938,
+          "log_loss": 0.201094,
+          "f1": 0.928284
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 24,
+      "seed": 23,
+      "dataset_size": 1332,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.987988,
+        "roc_auc": 0.99817,
+        "brier_score": 0.02083,
+        "log_loss": 0.117194,
+        "f1": 0.987342
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.356583
+        ],
+        [
+          "accuracy_hard",
+          0.326342
+        ],
+        [
+          "resume_claim_inflation",
+          0.082212
+        ],
+        [
+          "answer_change_rate",
+          0.080434
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.061598
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.987988,
+          "roc_auc": 0.99817,
+          "brier_score": 0.02083,
+          "log_loss": 0.117194,
+          "f1": 0.987342
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.987237,
+          "roc_auc": 0.99755,
+          "brier_score": 0.022173,
+          "log_loss": 0.130452,
+          "f1": 0.986519
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.981231,
+          "roc_auc": 0.997375,
+          "brier_score": 0.019229,
+          "log_loss": 0.103394,
+          "f1": 0.980206
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.987988,
+          "roc_auc": 0.996782,
+          "brier_score": 0.015901,
+          "log_loss": 0.079305,
+          "f1": 0.987342
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.97973,
+          "roc_auc": 0.996744,
+          "brier_score": 0.017369,
+          "log_loss": 0.077962,
+          "f1": 0.978757
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.975976,
+          "roc_auc": 0.995074,
+          "brier_score": 0.022738,
+          "log_loss": 0.098247,
+          "f1": 0.974724
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.928679,
+          "roc_auc": 0.980421,
+          "brier_score": 0.055706,
+          "log_loss": 0.200707,
+          "f1": 0.924303
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 24,
+      "seed": 47,
+      "dataset_size": 1332,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.988739,
+        "roc_auc": 0.998025,
+        "brier_score": 0.021164,
+        "log_loss": 0.11888,
+        "f1": 0.988124
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.339971
+        ],
+        [
+          "accuracy_hard",
+          0.327696
+        ],
+        [
+          "answer_change_rate",
+          0.059948
+        ],
+        [
+          "accuracy_overall",
+          0.057825
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.055014
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.988739,
+          "roc_auc": 0.998025,
+          "brier_score": 0.021164,
+          "log_loss": 0.11888,
+          "f1": 0.988124
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.983483,
+          "roc_auc": 0.997733,
+          "brier_score": 0.018828,
+          "log_loss": 0.101518,
+          "f1": 0.982567
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.984985,
+          "roc_auc": 0.997095,
+          "brier_score": 0.015716,
+          "log_loss": 0.077733,
+          "f1": 0.984152
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.98048,
+          "roc_auc": 0.996941,
+          "brier_score": 0.017248,
+          "log_loss": 0.076613,
+          "f1": 0.979592
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.984985,
+          "roc_auc": 0.99621,
+          "brier_score": 0.0235,
+          "log_loss": 0.133421,
+          "f1": 0.984177
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.976727,
+          "roc_auc": 0.994936,
+          "brier_score": 0.023278,
+          "log_loss": 0.09954,
+          "f1": 0.975494
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.924174,
+          "roc_auc": 0.979677,
+          "brier_score": 0.056437,
+          "log_loss": 0.204437,
+          "f1": 0.919778
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 24,
+      "seed": 59,
+      "dataset_size": 1332,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.986486,
+        "roc_auc": 0.998176,
+        "brier_score": 0.021412,
+        "log_loss": 0.120106,
+        "f1": 0.985759
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.372268
+        ],
+        [
+          "accuracy_hard",
+          0.326316
+        ],
+        [
+          "answer_change_rate",
+          0.084503
+        ],
+        [
+          "resume_claim_inflation",
+          0.071361
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.051282
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.986486,
+          "roc_auc": 0.998176,
+          "brier_score": 0.021412,
+          "log_loss": 0.120106,
+          "f1": 0.985759
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.981982,
+          "roc_auc": 0.997294,
+          "brier_score": 0.019994,
+          "log_loss": 0.106191,
+          "f1": 0.980983
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.983483,
+          "roc_auc": 0.996615,
+          "brier_score": 0.016624,
+          "log_loss": 0.081922,
+          "f1": 0.98254
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.985736,
+          "roc_auc": 0.996529,
+          "brier_score": 0.023717,
+          "log_loss": 0.13491,
+          "f1": 0.984933
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.98048,
+          "roc_auc": 0.996495,
+          "brier_score": 0.017909,
+          "log_loss": 0.079444,
+          "f1": 0.979528
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.974474,
+          "roc_auc": 0.994997,
+          "brier_score": 0.023467,
+          "log_loss": 0.100446,
+          "f1": 0.973059
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.929429,
+          "roc_auc": 0.979025,
+          "brier_score": 0.057144,
+          "log_loss": 0.208373,
+          "f1": 0.924437
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 48,
+      "seed": 11,
+      "dataset_size": 1620,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.988889,
+        "roc_auc": 0.999594,
+        "brier_score": 0.010322,
+        "log_loss": 0.055008,
+        "f1": 0.988312
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.449602
+        ],
+        [
+          "accuracy_hard",
+          0.127888
+        ],
+        [
+          "answer_change_rate",
+          0.09494
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.068681
+        ],
+        [
+          "accuracy_overall",
+          0.062453
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.988889,
+          "roc_auc": 0.999594,
+          "brier_score": 0.010322,
+          "log_loss": 0.055008,
+          "f1": 0.988312
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.990123,
+          "roc_auc": 0.999106,
+          "brier_score": 0.013618,
+          "log_loss": 0.076927,
+          "f1": 0.989624
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.988889,
+          "roc_auc": 0.998651,
+          "brier_score": 0.014855,
+          "log_loss": 0.088018,
+          "f1": 0.988327
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.989506,
+          "roc_auc": 0.99839,
+          "brier_score": 0.013903,
+          "log_loss": 0.077639,
+          "f1": 0.988968
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.985185,
+          "roc_auc": 0.998003,
+          "brier_score": 0.016822,
+          "log_loss": 0.087666,
+          "f1": 0.984456
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.975926,
+          "roc_auc": 0.997034,
+          "brier_score": 0.021831,
+          "log_loss": 0.096644,
+          "f1": 0.97456
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.937037,
+          "roc_auc": 0.984362,
+          "brier_score": 0.053295,
+          "log_loss": 0.202521,
+          "f1": 0.932718
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 48,
+      "seed": 23,
+      "dataset_size": 1620,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.989506,
+        "roc_auc": 0.999462,
+        "brier_score": 0.011409,
+        "log_loss": 0.062562,
+        "f1": 0.988983
+      },
+      "top_feature_importances": [
+        [
+          "accuracy_hard",
+          0.268718
+        ],
+        [
+          "weighted_accuracy",
+          0.212388
+        ],
+        [
+          "accuracy_overall",
+          0.12158
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.101441
+        ],
+        [
+          "answer_change_rate",
+          0.08034
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.989506,
+          "roc_auc": 0.999462,
+          "brier_score": 0.011409,
+          "log_loss": 0.062562,
+          "f1": 0.988983
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.991358,
+          "roc_auc": 0.99923,
+          "brier_score": 0.013781,
+          "log_loss": 0.077643,
+          "f1": 0.990909
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.990741,
+          "roc_auc": 0.998684,
+          "brier_score": 0.01307,
+          "log_loss": 0.078923,
+          "f1": 0.990279
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.990123,
+          "roc_auc": 0.998561,
+          "brier_score": 0.013609,
+          "log_loss": 0.076145,
+          "f1": 0.989637
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.983951,
+          "roc_auc": 0.997939,
+          "brier_score": 0.016885,
+          "log_loss": 0.085791,
+          "f1": 0.983182
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.97716,
+          "roc_auc": 0.997025,
+          "brier_score": 0.021456,
+          "log_loss": 0.094514,
+          "f1": 0.975896
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.934568,
+          "roc_auc": 0.982979,
+          "brier_score": 0.056171,
+          "log_loss": 0.20817,
+          "f1": 0.930079
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 48,
+      "seed": 47,
+      "dataset_size": 1620,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.989506,
+        "roc_auc": 0.999659,
+        "brier_score": 0.009812,
+        "log_loss": 0.050497,
+        "f1": 0.988983
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.321743
+        ],
+        [
+          "accuracy_hard",
+          0.21475
+        ],
+        [
+          "accuracy_overall",
+          0.111484
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.086911
+        ],
+        [
+          "avg_time_ratio",
+          0.07921
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.989506,
+          "roc_auc": 0.999659,
+          "brier_score": 0.009812,
+          "log_loss": 0.050497,
+          "f1": 0.988983
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.989506,
+          "roc_auc": 0.999126,
+          "brier_score": 0.012539,
+          "log_loss": 0.066513,
+          "f1": 0.988954
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.991975,
+          "roc_auc": 0.998793,
+          "brier_score": 0.012961,
+          "log_loss": 0.075832,
+          "f1": 0.991586
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.988272,
+          "roc_auc": 0.998478,
+          "brier_score": 0.013346,
+          "log_loss": 0.070261,
+          "f1": 0.98767
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.983951,
+          "roc_auc": 0.997775,
+          "brier_score": 0.016787,
+          "log_loss": 0.080735,
+          "f1": 0.983161
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.973457,
+          "roc_auc": 0.996791,
+          "brier_score": 0.02202,
+          "log_loss": 0.092901,
+          "f1": 0.97184
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.932099,
+          "roc_auc": 0.983022,
+          "brier_score": 0.05592,
+          "log_loss": 0.208947,
+          "f1": 0.927152
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 48,
+      "seed": 59,
+      "dataset_size": 1620,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.988889,
+        "roc_auc": 0.999273,
+        "brier_score": 0.012604,
+        "log_loss": 0.071102,
+        "f1": 0.988312
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.422615
+        ],
+        [
+          "accuracy_overall",
+          0.130419
+        ],
+        [
+          "accuracy_hard",
+          0.105504
+        ],
+        [
+          "answer_change_rate",
+          0.105193
+        ],
+        [
+          "external_evidence_score",
+          0.057226
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.988889,
+          "roc_auc": 0.999273,
+          "brier_score": 0.012604,
+          "log_loss": 0.071102,
+          "f1": 0.988312
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.987654,
+          "roc_auc": 0.998941,
+          "brier_score": 0.014823,
+          "log_loss": 0.08479,
+          "f1": 0.987013
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.990741,
+          "roc_auc": 0.998736,
+          "brier_score": 0.014337,
+          "log_loss": 0.089049,
+          "f1": 0.990279
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.988272,
+          "roc_auc": 0.998353,
+          "brier_score": 0.014267,
+          "log_loss": 0.079462,
+          "f1": 0.98767
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.985185,
+          "roc_auc": 0.997789,
+          "brier_score": 0.01647,
+          "log_loss": 0.082534,
+          "f1": 0.984476
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.976543,
+          "roc_auc": 0.997074,
+          "brier_score": 0.021378,
+          "log_loss": 0.09382,
+          "f1": 0.975196
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.940123,
+          "roc_auc": 0.984257,
+          "brier_score": 0.052799,
+          "log_loss": 0.198917,
+          "f1": 0.936058
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 96,
+      "seed": 11,
+      "dataset_size": 2196,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.989982,
+        "roc_auc": 0.999548,
+        "brier_score": 0.017457,
+        "log_loss": 0.094491,
+        "f1": 0.989671
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.273381
+        ],
+        [
+          "resume_claim_inflation",
+          0.215868
+        ],
+        [
+          "answer_change_rate",
+          0.183116
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.128075
+        ],
+        [
+          "accuracy_hard",
+          0.098382
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.989982,
+          "roc_auc": 0.999548,
+          "brier_score": 0.017457,
+          "log_loss": 0.094491,
+          "f1": 0.989671
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.992714,
+          "roc_auc": 0.999107,
+          "brier_score": 0.013575,
+          "log_loss": 0.074515,
+          "f1": 0.992481
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.992259,
+          "roc_auc": 0.999098,
+          "brier_score": 0.024788,
+          "log_loss": 0.137824,
+          "f1": 0.991992
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.992714,
+          "roc_auc": 0.998547,
+          "brier_score": 0.027172,
+          "log_loss": 0.152541,
+          "f1": 0.992467
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.987705,
+          "roc_auc": 0.998525,
+          "brier_score": 0.013996,
+          "log_loss": 0.073293,
+          "f1": 0.987306
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.983607,
+          "roc_auc": 0.998304,
+          "brier_score": 0.01932,
+          "log_loss": 0.08233,
+          "f1": 0.983019
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.943989,
+          "roc_auc": 0.984579,
+          "brier_score": 0.071307,
+          "log_loss": 0.259723,
+          "f1": 0.941233
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 96,
+      "seed": 23,
+      "dataset_size": 2196,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.987705,
+        "roc_auc": 0.999462,
+        "brier_score": 0.021584,
+        "log_loss": 0.114973,
+        "f1": 0.987342
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.271759
+        ],
+        [
+          "resume_claim_inflation",
+          0.215902
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.17833
+        ],
+        [
+          "accuracy_hard",
+          0.107815
+        ],
+        [
+          "answer_change_rate",
+          0.074872
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.987705,
+          "roc_auc": 0.999462,
+          "brier_score": 0.021584,
+          "log_loss": 0.114973,
+          "f1": 0.987342
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.991348,
+          "roc_auc": 0.999157,
+          "brier_score": 0.014676,
+          "log_loss": 0.078788,
+          "f1": 0.991076
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.990437,
+          "roc_auc": 0.999091,
+          "brier_score": 0.026761,
+          "log_loss": 0.145787,
+          "f1": 0.990127
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.987705,
+          "roc_auc": 0.99888,
+          "brier_score": 0.014072,
+          "log_loss": 0.075075,
+          "f1": 0.987294
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.992259,
+          "roc_auc": 0.998756,
+          "brier_score": 0.028884,
+          "log_loss": 0.160187,
+          "f1": 0.991992
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.980874,
+          "roc_auc": 0.998375,
+          "brier_score": 0.021409,
+          "log_loss": 0.092618,
+          "f1": 0.980151
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.943989,
+          "roc_auc": 0.985316,
+          "brier_score": 0.071668,
+          "log_loss": 0.263589,
+          "f1": 0.941789
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 96,
+      "seed": 47,
+      "dataset_size": 2196,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.988616,
+        "roc_auc": 0.999242,
+        "brier_score": 0.023274,
+        "log_loss": 0.119525,
+        "f1": 0.988279
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.267014
+        ],
+        [
+          "resume_claim_inflation",
+          0.219915
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.17767
+        ],
+        [
+          "accuracy_hard",
+          0.106097
+        ],
+        [
+          "answer_change_rate",
+          0.072921
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.988616,
+          "roc_auc": 0.999242,
+          "brier_score": 0.023274,
+          "log_loss": 0.119525,
+          "f1": 0.988279
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.991348,
+          "roc_auc": 0.998998,
+          "brier_score": 0.025549,
+          "log_loss": 0.139607,
+          "f1": 0.991076
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.990437,
+          "roc_auc": 0.998949,
+          "brier_score": 0.013817,
+          "log_loss": 0.074412,
+          "f1": 0.990127
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.991803,
+          "roc_auc": 0.998692,
+          "brier_score": 0.029458,
+          "log_loss": 0.161864,
+          "f1": 0.991541
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.98816,
+          "roc_auc": 0.998382,
+          "brier_score": 0.014065,
+          "log_loss": 0.073505,
+          "f1": 0.98777
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.980419,
+          "roc_auc": 0.998065,
+          "brier_score": 0.019554,
+          "log_loss": 0.082733,
+          "f1": 0.979669
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.941712,
+          "roc_auc": 0.984458,
+          "brier_score": 0.072235,
+          "log_loss": 0.263297,
+          "f1": 0.93899
+        }
+      ]
+    },
+    {
+      "samples_per_variant": 96,
+      "seed": 59,
+      "dataset_size": 2196,
+      "best_candidate_name": "gradient_boosting",
+      "best_metrics": {
+        "candidate_name": "gradient_boosting",
+        "accuracy": 0.989526,
+        "roc_auc": 0.999424,
+        "brier_score": 0.02034,
+        "log_loss": 0.107556,
+        "f1": 0.989217
+      },
+      "top_feature_importances": [
+        [
+          "weighted_accuracy",
+          0.269796
+        ],
+        [
+          "resume_claim_inflation",
+          0.216721
+        ],
+        [
+          "codeforces_rating_normalized",
+          0.172493
+        ],
+        [
+          "accuracy_hard",
+          0.10707
+        ],
+        [
+          "answer_change_rate",
+          0.093537
+        ]
+      ],
+      "candidate_count": 7,
+      "ranked_results": [
+        {
+          "candidate_name": "gradient_boosting",
+          "accuracy": 0.989526,
+          "roc_auc": 0.999424,
+          "brier_score": 0.02034,
+          "log_loss": 0.107556,
+          "f1": 0.989217
+        },
+        {
+          "candidate_name": "hist_gradient_boosting",
+          "accuracy": 0.989526,
+          "roc_auc": 0.999161,
+          "brier_score": 0.024242,
+          "log_loss": 0.134617,
+          "f1": 0.989207
+        },
+        {
+          "candidate_name": "soft_voting_ensemble",
+          "accuracy": 0.990893,
+          "roc_auc": 0.999146,
+          "brier_score": 0.013489,
+          "log_loss": 0.0748,
+          "f1": 0.990602
+        },
+        {
+          "candidate_name": "random_forest",
+          "accuracy": 0.98725,
+          "roc_auc": 0.998589,
+          "brier_score": 0.013673,
+          "log_loss": 0.071849,
+          "f1": 0.98683
+        },
+        {
+          "candidate_name": "xgboost",
+          "accuracy": 0.993169,
+          "roc_auc": 0.998579,
+          "brier_score": 0.027913,
+          "log_loss": 0.1557,
+          "f1": 0.992921
+        },
+        {
+          "candidate_name": "extra_trees",
+          "accuracy": 0.98133,
+          "roc_auc": 0.998458,
+          "brier_score": 0.019255,
+          "log_loss": 0.084039,
+          "f1": 0.980633
+        },
+        {
+          "candidate_name": "logistic_regression",
+          "accuracy": 0.947177,
+          "roc_auc": 0.987168,
+          "brier_score": 0.068435,
+          "log_loss": 0.252242,
+          "f1": 0.944814
+        }
+      ]
+    }
+  ]
+}

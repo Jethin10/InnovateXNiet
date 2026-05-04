@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: placement-trust-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -e .
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    disk:
+      name: placement-trust-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: APP_ENV
+        value: production
+      - key: DOCS_ENABLED
+        value: "false"
+      - key: DATABASE_URL
+        value: sqlite:////var/data/placement_trust.db
+      - key: MODEL_ARTIFACT_PATH
+        value: artifacts/trust_model.joblib
+      - key: AUTH_SECRET_KEY
+        sync: false
+      - key: ADMIN_REGISTRATION_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: JUDGE0_BASE_URL
+        sync: false
+      - key: JUDGE0_API_KEY
+        sync: false
+      - key: JUDGE0_AUTH_TOKEN
+        sync: false
+      - key: HUGGINGFACE_API_TOKEN
+        sync: false
+      - key: RAPIDAPI_KEY
+        sync: false
+

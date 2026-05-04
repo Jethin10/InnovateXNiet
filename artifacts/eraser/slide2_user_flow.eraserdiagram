@@ -1,0 +1,55 @@
+colorMode pastel
+styleMode shadow
+typeface clean
+
+Student_Journey [label: "Student Journey", color: blue] {
+  Student {
+    Sign_Up [label: "Sign in / Sign up", type: event, icon: user]
+    Submit_Profile [label: "Upload resume or enter skills", type: activity, icon: file]
+    Link_Evidence [label: "Link coding profiles + projects", type: activity, icon: link]
+    Choose_Target [label: "Select target role + company", type: activity, icon: target]
+    Take_Test [label: "Take 3-stage assessment", type: activity, icon: list]
+    View_Score [label: "View trust score + skill gaps", type: activity, icon: chart-column]
+    Follow_Roadmap [label: "Follow roadmap nodes + assignments", type: activity, icon: route]
+    Unlock_Stamp [label: "Earn stronger Trust Stamp", type: event, icon: shield]
+  }
+}
+
+Trust_Platform [label: "Trust Platform", color: orange] {
+  Core_System {
+    Extract_Claims [label: "Extract claims + role hints", type: activity, icon: search]
+    Build_Plan [label: "Build verification plan", type: activity, icon: clipboard]
+    Score_Readiness [label: "Score readiness + bluff risk", type: activity, icon: brain]
+    Generate_Roadmap [label: "Generate dynamic roadmap", type: activity, icon: sparkles]
+    Track_Progress [label: "Track proof, streaks, milestones", type: activity, icon: trophy]
+  }
+}
+
+External_Stakeholders [label: "External Stakeholders", color: green] {
+  Recruiter {
+    Open_Stamp [label: "Open Trust Stamp URL", type: activity, icon: shield]
+    Verify_Profile [label: "Verify evidence-backed profile", type: event, icon: search]
+  }
+  College {
+    View_Cohort [label: "Monitor cohort readiness dashboard", type: activity, icon: bar-chart-3]
+    Intervene [label: "Identify weak skills + intervene", type: event, icon: users]
+  }
+}
+
+Sign_Up > Submit_Profile
+Submit_Profile > Link_Evidence
+Link_Evidence > Choose_Target
+Choose_Target > Extract_Claims: "claims + targets"
+Extract_Claims > Build_Plan
+Build_Plan > Take_Test: "easy -> medium -> hard"
+Take_Test > Score_Readiness: "answers + timing + confidence"
+Score_Readiness > View_Score
+Score_Readiness > Generate_Roadmap
+Generate_Roadmap > Follow_Roadmap
+Follow_Roadmap > Track_Progress: "proof submissions"
+Track_Progress > Unlock_Stamp
+Unlock_Stamp > Open_Stamp
+Open_Stamp > Verify_Profile
+Score_Readiness > View_Cohort
+Generate_Roadmap > View_Cohort
+View_Cohort > Intervene
