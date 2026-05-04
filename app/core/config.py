@@ -10,6 +10,26 @@ def _csv_env(name: str, default: str) -> list[str]:
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
+DEFAULT_CORS_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "http://localhost:3002",
+    "http://127.0.0.1:3002",
+    "http://localhost:3003",
+    "http://127.0.0.1:3003",
+    "http://localhost:3004",
+    "http://127.0.0.1:3004",
+    "https://innovate-x-niet.vercel.app",
+]
+
+
+def _cors_origins() -> list[str]:
+    configured = _csv_env("CORS_ORIGINS", "")
+    return sorted(set(DEFAULT_CORS_ORIGINS + configured))
+
+
 class Settings(BaseModel):
     app_name: str = "placement-trust-backend"
     app_env: str = "development"
@@ -58,23 +78,7 @@ def build_settings(overrides: dict[str, str] | None = None) -> Settings:
         "huggingface_proctoring_disabled": os.getenv("HUGGINGFACE_PROCTORING_DISABLED", "false").lower() == "true",
         "rapidapi_key": os.getenv("RAPIDAPI_KEY") or os.getenv("JSEARCH_API_KEY") or None,
         "jsearch_host": os.getenv("JSEARCH_HOST", "jsearch.p.rapidapi.com"),
-        "cors_origins": _csv_env(
-            "CORS_ORIGINS",
-            ",".join(
-                [
-                    "http://localhost:3000",
-                    "http://127.0.0.1:3000",
-                    "http://localhost:3001",
-                    "http://127.0.0.1:3001",
-                    "http://localhost:3002",
-                    "http://127.0.0.1:3002",
-                    "http://localhost:3003",
-                    "http://127.0.0.1:3003",
-                    "http://localhost:3004",
-                    "http://127.0.0.1:3004",
-                ]
-            ),
-        ),
+        "cors_origins": _cors_origins(),
         "cors_origin_regex": os.getenv("CORS_ORIGIN_REGEX") or None,
     }
     if overrides:
