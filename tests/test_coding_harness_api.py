@@ -172,6 +172,32 @@ def test_coding_submission_rejects_copy_paste_attempts(tmp_path):
     assert response.json()["detail"] == "copy_paste_attempt"
 
 
+def test_coding_submission_rejects_local_face_detection_events(tmp_path):
+    app = create_app(
+        {
+            "database_url": f"sqlite:///{tmp_path / 'coding-face-proctoring.db'}",
+            "auth_secret_key": "test-secret",
+        }
+    )
+    client = TestClient(app)
+    student_id, headers = _student(client)
+
+    response = client.post(
+        f"/api/v1/students/{student_id}/coding/submissions",
+        headers=headers,
+        json={
+            "problem_id": "two_sum_indices",
+            "language": "python",
+            "code": "def solve(nums, target):\n    return [0, 1]\n",
+            "proctoring_checks": PROCTORING_CHECKS,
+            "proctoring_events": [{"event_type": "multiple_faces", "count": 1, "severity": 0.95}],
+        },
+    )
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "multiple_faces"
+
+
 def test_proctoring_frame_analysis_falls_back_without_hugging_face_token(tmp_path):
     app = create_app(
         {
