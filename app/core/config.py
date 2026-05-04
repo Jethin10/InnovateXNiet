@@ -48,6 +48,10 @@ class Settings(BaseModel):
     judge0_base_url: str | None = None
     judge0_api_key: str | None = None
     judge0_auth_token: str | None = None
+    judge0_c_language_id: int = 50
+    judge0_cpp_language_id: int = 54
+    judge0_java_language_id: int = 62
+    judge0_javascript_language_id: int = 63
     judge0_python_language_id: int = 71
     huggingface_api_token: str | None = None
     huggingface_proctoring_model: str = "facebook/detr-resnet-50"
@@ -74,6 +78,10 @@ def build_settings(overrides: dict[str, str] | None = None) -> Settings:
         "judge0_base_url": os.getenv("JUDGE0_BASE_URL") or None,
         "judge0_api_key": os.getenv("JUDGE0_API_KEY") or None,
         "judge0_auth_token": os.getenv("JUDGE0_AUTH_TOKEN") or None,
+        "judge0_c_language_id": int(os.getenv("JUDGE0_C_LANGUAGE_ID", "50")),
+        "judge0_cpp_language_id": int(os.getenv("JUDGE0_CPP_LANGUAGE_ID", "54")),
+        "judge0_java_language_id": int(os.getenv("JUDGE0_JAVA_LANGUAGE_ID", "62")),
+        "judge0_javascript_language_id": int(os.getenv("JUDGE0_JAVASCRIPT_LANGUAGE_ID", "63")),
         "judge0_python_language_id": int(os.getenv("JUDGE0_PYTHON_LANGUAGE_ID", "71")),
         "huggingface_api_token": os.getenv("HUGGINGFACE_API_TOKEN") or os.getenv("HF_TOKEN") or None,
         "huggingface_proctoring_model": os.getenv("HUGGINGFACE_PROCTORING_MODEL", "facebook/detr-resnet-50"),

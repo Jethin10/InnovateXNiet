@@ -1,7 +1,61 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from typing import Any
+
+
+SUPPORTED_CODING_LANGUAGES = (
+    {"id": "python", "label": "Python", "monaco_language": "python"},
+    {"id": "java", "label": "Java", "monaco_language": "java"},
+    {"id": "c", "label": "C", "monaco_language": "c"},
+    {"id": "cpp", "label": "C++", "monaco_language": "cpp"},
+    {"id": "javascript", "label": "JavaScript", "monaco_language": "javascript"},
+)
+
+
+def _javascript_starter(problem: "CodingProblem") -> str:
+    args = ", ".join(problem.public_cases[0].input.keys()) if problem.public_cases else ""
+    return f"""function {problem.function_name}({args}) {{
+  return null;
+}}
+"""
+
+
+def _json_runner_starter(problem: "CodingProblem", language: str) -> str:
+    sample = problem.public_cases[0] if problem.public_cases else None
+    sample_input = json.dumps(sample.input if sample else {}, separators=(",", ":"))
+    sample_expected = json.dumps(sample.expected if sample else None, separators=(",", ":"))
+    if language == "java":
+        return f"""class Solution {{
+    // {problem.title}
+    // Input JSON: {sample_input}
+    // Expected JSON: {sample_expected}
+    static String {problem.function_name}(String inputJson) {{
+        return "null";
+    }}
+}}
+"""
+    if language == "c":
+        return f"""// {problem.title}
+// Input JSON: {sample_input}
+// Expected JSON: {sample_expected}
+const char* {problem.function_name}(const char* input_json) {{
+    return "null";
+}}
+"""
+    if language == "cpp":
+        return f"""#include <string>
+using namespace std;
+
+// {problem.title}
+// Input JSON: {sample_input}
+// Expected JSON: {sample_expected}
+string {problem.function_name}(const string& inputJson) {{
+    return "null";
+}}
+"""
+    raise ValueError(f"Unsupported JSON starter language: {language}")
 
 
 @dataclass(frozen=True)
@@ -23,6 +77,15 @@ class CodingProblem:
     public_cases: tuple[CodingTestCase, ...]
     hidden_cases: tuple[CodingTestCase, ...]
 
+    def starter_code_by_language(self) -> dict[str, str]:
+        return {
+            "python": self.starter_code,
+            "java": _json_runner_starter(self, "java"),
+            "c": _json_runner_starter(self, "c"),
+            "cpp": _json_runner_starter(self, "cpp"),
+            "javascript": _javascript_starter(self),
+        }
+
     def public_payload(self) -> dict:
         return {
             "problem_id": self.problem_id,
@@ -32,6 +95,8 @@ class CodingProblem:
             "statement": self.statement,
             "function_name": self.function_name,
             "starter_code": self.starter_code,
+            "starter_code_by_language": self.starter_code_by_language(),
+            "supported_languages": [dict(language) for language in SUPPORTED_CODING_LANGUAGES],
             "examples": [
                 {"input": case.input, "expected": case.expected}
                 for case in self.public_cases

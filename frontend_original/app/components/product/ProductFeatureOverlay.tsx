@@ -28,6 +28,7 @@ import {
   StudentResponse,
   ApiError,
   apiRequest,
+  codingStarterForLanguage,
   jsonBody,
 } from "@/app/lib/api";
 import { useFeatureStore } from "@stores";
@@ -92,6 +93,7 @@ const answerKey: Record<string, string> = {
 };
 
 const defaultCodingStarter = "def solve(nums, target):\n    return []\n";
+const defaultCodingLanguage = "python";
 
 const featureTitles: Record<string, string> = {
   account: "Account Passport",
@@ -128,6 +130,7 @@ const ProductFeatureOverlay = () => {
   const githubTokenRef = useRef<HTMLInputElement>(null);
   const [includePrivateRepos, setIncludePrivateRepos] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState("two_sum_indices");
+  const [selectedCodingLanguage, setSelectedCodingLanguage] = useState(defaultCodingLanguage);
   const [code, setCode] = useState(defaultCodingStarter);
   const [adaptiveCodingIntent, setAdaptiveCodingIntent] = useState<AdaptiveCodingTestIntent | null>(null);
   const [jobLocation, setJobLocation] = useState("India");
@@ -148,6 +151,10 @@ const ProductFeatureOverlay = () => {
       }
       return updated;
     });
+  };
+
+  const starterForLanguage = (problem: CodingProblem, language: string) => {
+    return codingStarterForLanguage(problem, language);
   };
 
   const ensureSession = async () => {
@@ -265,7 +272,7 @@ const ProductFeatureOverlay = () => {
     const selectedProblem = problems.find((problem) => problem.problem_id === selectedProblemId) ?? problems[0];
     if (selectedProblem) {
       setSelectedProblemId(selectedProblem.problem_id);
-      setCode(selectedProblem.starter_code);
+      setCode(starterForLanguage(selectedProblem, selectedCodingLanguage));
     }
     return problems;
   };
@@ -287,7 +294,7 @@ const ProductFeatureOverlay = () => {
 
       setAdaptiveCodingIntent(intent);
       setSelectedProblemId(selectedProblem.problem_id);
-      setCode(selectedProblem.starter_code);
+      setCode(starterForLanguage(selectedProblem, selectedCodingLanguage));
       patchState({ problems: orderedProblems, coding: undefined });
       setStatus(`Adaptive coding test for ${intent.role}`);
     } catch {
@@ -297,7 +304,14 @@ const ProductFeatureOverlay = () => {
 
   const selectCodingProblem = (problem: CodingProblem) => {
     setSelectedProblemId(problem.problem_id);
-    setCode(problem.starter_code);
+    setCode(starterForLanguage(problem, selectedCodingLanguage));
+    patchState({ coding: undefined });
+  };
+
+  const selectCodingLanguage = (language: string) => {
+    setSelectedCodingLanguage(language);
+    const selectedProblem = state.problems?.find((problem) => problem.problem_id === selectedProblemId);
+    if (selectedProblem) setCode(starterForLanguage(selectedProblem, language));
     patchState({ coding: undefined });
   };
 
@@ -310,7 +324,7 @@ const ProductFeatureOverlay = () => {
     const coding = await apiRequest<CodingSubmissionResponse>(`/api/v1/students/${session.studentId}/coding/submissions`, {
       method: "POST",
       token: session.token,
-      body: jsonBody({ problem_id: problemId, language: "python", code: codeOverride ?? code, ...proctoring }),
+      body: jsonBody({ problem_id: problemId, language: selectedCodingLanguage, code: codeOverride ?? code, ...proctoring }),
     });
     patchState({ coding });
   });
@@ -546,8 +560,10 @@ const ProductFeatureOverlay = () => {
                 problems={state.problems ?? []}
                 runCoding={runCoding}
                 analyzeProctoringFrame={analyzeProctoringFrame}
+                selectedLanguage={selectedCodingLanguage}
                 selectedProblemId={selectedProblemId}
                 setCode={setCode}
+                setSelectedLanguage={selectCodingLanguage}
                 status={status}
                 submission={state.coding}
                 adaptiveFocusSkills={adaptiveCodingIntent?.focusSkills}

@@ -9,6 +9,7 @@ import {
   GitHubEvidenceResponse,
   StudentResponse,
   apiRequest,
+  codingStarterForLanguage,
   jsonBody,
 } from "@/app/lib/api";
 import { DemoFlowState, checkBackendHealth, runPlacementTrustDemo } from "@/app/lib/demoFlow";
@@ -26,6 +27,14 @@ const percent = (value?: number) => {
   return `${Math.round(value * 100)}%`;
 };
 
+const defaultLanguageOptions = [
+  { id: "python", label: "Python", monaco_language: "python" },
+  { id: "java", label: "Java", monaco_language: "java" },
+  { id: "c", label: "C", monaco_language: "c" },
+  { id: "cpp", label: "C++", monaco_language: "cpp" },
+  { id: "javascript", label: "JavaScript", monaco_language: "javascript" },
+];
+
 const BackendBridge = () => {
   const [status, setStatus] = useState<BridgeStatus>("checking");
   const [message, setMessage] = useState("Checking backend");
@@ -35,6 +44,7 @@ const BackendBridge = () => {
   const [session, setSession] = useState<DemoSession | null>(null);
   const [problems, setProblems] = useState<CodingProblem[]>([]);
   const [selectedProblemId, setSelectedProblemId] = useState("two_sum_indices");
+  const [selectedLanguage, setSelectedLanguage] = useState("python");
   const [code, setCode] = useState("");
   const [submission, setSubmission] = useState<CodingSubmissionResponse | null>(null);
   const [githubUsername, setGithubUsername] = useState("octocat");
@@ -68,7 +78,7 @@ const BackendBridge = () => {
         const firstProblem = items[0];
         if (firstProblem) {
           setSelectedProblemId(firstProblem.problem_id);
-          setCode(firstProblem.starter_code);
+          setCode(codingStarterForLanguage(firstProblem, selectedLanguage));
         }
       })
       .catch((error) => setMessage(error instanceof Error ? error.message : "Problem catalog failed"));
@@ -76,8 +86,8 @@ const BackendBridge = () => {
 
   useEffect(() => {
     const problem = problems.find((item) => item.problem_id === selectedProblemId);
-    if (problem) setCode(problem.starter_code);
-  }, [selectedProblemId, problems]);
+    if (problem) setCode(codingStarterForLanguage(problem, selectedLanguage));
+  }, [selectedLanguage, selectedProblemId, problems]);
 
   const ensureDemoSession = async (): Promise<DemoSession> => {
     if (session) return session;
@@ -139,7 +149,7 @@ const BackendBridge = () => {
           token: activeSession.token,
           body: jsonBody({
             problem_id: selectedProblemId,
-            language: "python",
+            language: selectedLanguage,
             code,
           }),
         }
@@ -279,6 +289,18 @@ const BackendBridge = () => {
                   <div className="mt-1">Skills: {selectedProblem.skill_tags.join(", ")}</div>
                 </div>
               )}
+
+              <select
+                value={selectedLanguage}
+                onChange={(event) => setSelectedLanguage(event.target.value)}
+                className="w-full rounded border border-white/15 bg-black/60 px-3 py-2 text-sm text-white"
+              >
+                {(selectedProblem?.supported_languages?.length ? selectedProblem.supported_languages : defaultLanguageOptions).map((language) => (
+                  <option key={language.id} value={language.id}>
+                    {language.label}
+                  </option>
+                ))}
+              </select>
 
               <textarea
                 value={code}

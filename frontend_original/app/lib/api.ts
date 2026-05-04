@@ -135,6 +135,12 @@ export interface CodingProblem {
   statement: string;
   function_name: string;
   starter_code: string;
+  starter_code_by_language?: Record<string, string>;
+  supported_languages?: Array<{
+    id: string;
+    label: string;
+    monaco_language: string;
+  }>;
   examples: Array<{
     input: Record<string, unknown>;
     expected: unknown;
@@ -459,4 +465,32 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
 
 export function jsonBody(payload: unknown) {
   return JSON.stringify(payload);
+}
+
+export function codingStarterForLanguage(problem: CodingProblem, language: string): string {
+  const apiStarter = problem.starter_code_by_language?.[language];
+  if (apiStarter) return apiStarter;
+
+  const example = problem.examples[0];
+  const args = Object.keys(example?.input ?? {});
+  const sampleInput = JSON.stringify(example?.input ?? {});
+  const sampleExpected = JSON.stringify(example?.expected ?? null);
+
+  if (language === "javascript") {
+    return `function ${problem.function_name}(${args.join(", ")}) {\n  return null;\n}\n`;
+  }
+
+  if (language === "java") {
+    return `class Solution {\n    // ${problem.title}\n    // Input JSON: ${sampleInput}\n    // Expected JSON: ${sampleExpected}\n    static String ${problem.function_name}(String inputJson) {\n        return \"null\";\n    }\n}\n`;
+  }
+
+  if (language === "c") {
+    return `// ${problem.title}\n// Input JSON: ${sampleInput}\n// Expected JSON: ${sampleExpected}\nconst char* ${problem.function_name}(const char* input_json) {\n    return \"null\";\n}\n`;
+  }
+
+  if (language === "cpp") {
+    return `#include <string>\nusing namespace std;\n\n// ${problem.title}\n// Input JSON: ${sampleInput}\n// Expected JSON: ${sampleExpected}\nstring ${problem.function_name}(const string& inputJson) {\n    return \"null\";\n}\n`;
+  }
+
+  return problem.starter_code;
 }
