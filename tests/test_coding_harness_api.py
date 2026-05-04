@@ -251,6 +251,40 @@ def test_coding_submission_rejects_local_face_detection_events(tmp_path):
     assert response.json()["detail"] == "multiple_faces"
 
 
+def test_coding_submission_records_zero_score_after_proctoring_termination(tmp_path):
+    app = create_app(
+        {
+            "database_url": f"sqlite:///{tmp_path / 'coding-proctoring-terminated.db'}",
+            "auth_secret_key": "test-secret",
+        }
+    )
+    client = TestClient(app)
+    student_id, headers = _student(client)
+
+    response = client.post(
+        f"/api/v1/students/{student_id}/coding/submissions",
+        headers=headers,
+        json={
+            "problem_id": "two_sum_indices",
+            "language": "python",
+            "code": """
+def solve(nums, target):
+    return [0, 1]
+""",
+            "proctoring_checks": {**PROCTORING_CHECKS, "fullscreen_active": False, "camera_active": False},
+            "proctoring_events": [{"event_type": "proctoring_terminated", "count": 1, "severity": 1}],
+        },
+    )
+
+    assert response.status_code == 201
+    payload = response.json()
+    assert payload["passed"] is False
+    assert payload["score"] == 0
+    assert payload["public_results"] == []
+    assert payload["hidden_passed_count"] == 0
+    assert "proctoring_terminated" in payload["integrity_flags"]
+
+
 def test_proctoring_frame_analysis_falls_back_without_hugging_face_token(tmp_path):
     app = create_app(
         {

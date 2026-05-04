@@ -67,6 +67,8 @@ class CodingHarnessService:
         if integrity_flags:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=integrity_flags[0])
         proctoring_flags = self._proctoring_flags(request)
+        if "proctoring_terminated" in proctoring_flags:
+            return self._zero_score_submission(student_id, request, problem, proctoring_flags)
         blocking_flags = [
             flag
             for flag in proctoring_flags
@@ -125,6 +127,41 @@ class CodingHarnessService:
             skill_tags=list(problem.skill_tags),
         )
 
+    def _zero_score_submission(
+        self,
+        student_id: int,
+        request: CodingSubmissionRequest,
+        problem: CodingProblem,
+        proctoring_flags: list[str],
+    ) -> CodingSubmissionResponse:
+        submission_id = str(uuid.uuid4())
+        self._persist_submission_summary(
+            student_id,
+            {
+                "submission_id": submission_id,
+                "problem_id": problem.problem_id,
+                "title": problem.title,
+                "language": request.language.strip().lower(),
+                "passed": False,
+                "score": 0,
+                "skill_tags": list(problem.skill_tags),
+                "proctoring_checks": request.proctoring_checks,
+                "proctoring_events": [event.model_dump() for event in request.proctoring_events],
+                "integrity_flags": proctoring_flags,
+            },
+        )
+        return CodingSubmissionResponse(
+            submission_id=submission_id,
+            problem_id=problem.problem_id,
+            passed=False,
+            score=0,
+            public_results=[],
+            hidden_passed_count=0,
+            hidden_total_count=len(problem.hidden_cases),
+            integrity_flags=proctoring_flags,
+            skill_tags=list(problem.skill_tags),
+        )
+
     def _normalize_language(self, language: str) -> str:
         normalized = language.strip().lower().replace(" ", "")
         normalized = LANGUAGE_ALIASES.get(normalized, normalized)
@@ -166,6 +203,8 @@ class CodingHarnessService:
                 flags.append("camera_ended")
             elif event_type in {"face_not_detected", "face_off_center", "multiple_faces"}:
                 flags.append(event_type)
+            elif event_type in {"proctoring_terminated"}:
+                flags.append("proctoring_terminated")
             elif event_type.startswith("hf_"):
                 flags.append(event_type)
         return list(dict.fromkeys(flags))

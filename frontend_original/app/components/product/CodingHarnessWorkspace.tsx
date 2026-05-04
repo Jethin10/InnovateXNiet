@@ -50,6 +50,9 @@ const secureEditorOptions = {
 };
 
 const hfModelLabel = process.env.NEXT_PUBLIC_HF_PROCTORING_MODEL ?? "MediaPipe face + Hugging Face object proctor";
+const INCIDENTS_PER_RED_ALERT = 3;
+const MAX_RED_ALERTS = 3;
+const NON_INCIDENT_EVENTS = new Set(["proctoring_alert", "proctoring_terminated"]);
 
 const defaultLanguageOptions = [
   { id: "python", label: "Python", monaco_language: "python" },
@@ -187,6 +190,9 @@ export default function CodingHarnessWorkspace({
   const [proctoringError, setProctoringError] = useState<string | null>(null);
   const [hfInsight, setHfInsight] = useState("AI proctor waits for secure camera mode.");
   const [events, setEvents] = useState<Record<string, CodingProctoringEvent>>({});
+  const [testTerminated, setTestTerminated] = useState(false);
+  const issuedAlertsRef = useRef(0);
+  const terminationSubmittedRef = useRef(false);
   const selectedProblem = problems.find((problem) => problem.problem_id === selectedProblemId) ?? problems[0];
   const languageOptions = selectedProblem?.supported_languages?.length ? selectedProblem.supported_languages : defaultLanguageOptions;
   const activeLanguage = languageOptions.find((language) => language.id === selectedLanguage) ?? languageOptions[0];
@@ -201,7 +207,16 @@ export default function CodingHarnessWorkspace({
   const cameraActive = Boolean(cameraStream?.active);
   const monitorShareActive = screenShareActive && entireScreenShared;
   const mediaReady = monitorShareActive && cameraActive && copyPasteBlocked;
-  const harnessSecure = mediaReady && fullscreenActive;
+  const harnessSecure = mediaReady && fullscreenActive && !testTerminated;
+  const incidentCount = useMemo(
+    () =>
+      Object.values(events).reduce(
+        (total, event) => total + (NON_INCIDENT_EVENTS.has(event.event_type) ? 0 : event.count),
+        0,
+      ),
+    [events],
+  );
+  const redAlertCount = Math.min(MAX_RED_ALERTS, Math.floor(incidentCount / INCIDENTS_PER_RED_ALERT));
   const proctoringPayload = useMemo<CodingProctoringPayload>(() => ({
     proctoring_checks: {
       camera_active: cameraActive,
@@ -227,6 +242,39 @@ export default function CodingHarnessWorkspace({
     });
   }, []);
 
+  const terminateTest = useCallback(() => {
+    if (terminationSubmittedRef.current) return;
+    terminationSubmittedRef.current = true;
+    setTestTerminated(true);
+    setProctoringError("Test closed after 3 red alerts. This attempt is submitted for zero marks.");
+    const terminationEvent: CodingProctoringEvent = {
+      event_type: "proctoring_terminated",
+      count: 1,
+      severity: 1,
+    };
+    runCoding(
+      {
+        proctoring_checks: {
+          camera_active: false,
+          copy_paste_blocked: copyPasteBlocked,
+          fullscreen_active: false,
+          screen_share_active: false,
+          screen_share_surface_monitor: false,
+        },
+        proctoring_events: [...Object.values(events), terminationEvent],
+      },
+      code,
+    );
+    setEvents((current) => ({ ...current, proctoring_terminated: terminationEvent }));
+    screenStream?.getTracks().forEach((track) => track.stop());
+    cameraStream?.getTracks().forEach((track) => track.stop());
+    setScreenStream(null);
+    setCameraStream(null);
+    setEntireScreenShared(false);
+    const exitFullscreen = document.exitFullscreen?.();
+    void exitFullscreen?.catch(() => undefined);
+  }, [cameraStream, code, copyPasteBlocked, events, runCoding, screenStream]);
+
   const lockFullscreen = useCallback(async () => {
     try {
       const fullscreenTarget = harnessRef.current ?? document.documentElement;
@@ -241,6 +289,10 @@ export default function CodingHarnessWorkspace({
 
   const startSecureHarness = async () => {
     setProctoringError(null);
+    if (testTerminated) {
+      setProctoringError("This attempt was closed after 3 red alerts.");
+      return;
+    }
     try {
       const displayStream = await navigator.mediaDevices.getDisplayMedia({
         audio: false,
@@ -283,6 +335,10 @@ export default function CodingHarnessWorkspace({
   };
 
   const guardedRunCoding = (codeOverride?: string) => {
+    if (testTerminated) {
+      setProctoringError("This attempt was closed after 3 red alerts.");
+      return;
+    }
     if (!harnessSecure) {
       setProctoringError("Lock fullscreen, share entire screen, and keep camera active before running code.");
       return;
@@ -326,6 +382,10 @@ export default function CodingHarnessWorkspace({
         event.preventDefault();
         recordEvent(`shortcut_${key}`, key === "v" ? 0.95 : 0.55);
       }
+      if (key === "escape") {
+        event.preventDefault();
+        recordEvent("escape_attempt", 0.95);
+      }
     };
     const handleVisibility = () => {
       if (document.hidden) recordEvent("visibility_hidden", 0.85);
@@ -353,6 +413,18 @@ export default function CodingHarnessWorkspace({
       window.removeEventListener("blur", handleBlur);
     };
   }, [recordEvent]);
+
+  useEffect(() => {
+    if (!harnessSecure || testTerminated) return;
+    if (redAlertCount > issuedAlertsRef.current) {
+      issuedAlertsRef.current = redAlertCount;
+      recordEvent("proctoring_alert", 1);
+      setProctoringError(`Red alert ${redAlertCount}/${MAX_RED_ALERTS}: ${incidentCount} security incidents recorded.`);
+    }
+    if (redAlertCount >= MAX_RED_ALERTS) {
+      terminateTest();
+    }
+  }, [harnessSecure, incidentCount, recordEvent, redAlertCount, terminateTest, testTerminated]);
 
   useEffect(() => {
     if (screenVideoRef.current && screenStream) screenVideoRef.current.srcObject = screenStream;
@@ -482,13 +554,21 @@ export default function CodingHarnessWorkspace({
           <div className="mt-2 flex flex-wrap items-center gap-2 text-[0.65rem] uppercase tracking-[0.14em] text-white/42">
             <span className="border border-white/10 bg-white/[0.035] px-2 py-1">{hfModelLabel}</span>
             <span className="border border-white/10 bg-white/[0.035] px-2 py-1">
-              Incidents {Object.values(events).reduce((total, event) => total + event.count, 0)}
+              Incidents {incidentCount}
+            </span>
+            <span className={`border px-2 py-1 ${redAlertCount > 0 ? "border-red-300/40 bg-red-500/20 text-red-100" : "border-white/10 bg-white/[0.035]"}`}>
+              Red alerts {redAlertCount}/{MAX_RED_ALERTS}
             </span>
             <span className="border border-white/10 bg-white/[0.035] px-2 py-1 normal-case tracking-normal text-white/50">
               {hfInsight}
             </span>
             {proctoringError && <span className="border border-red-200/30 bg-red-400/12 px-2 py-1 text-red-100">{proctoringError}</span>}
           </div>
+          {redAlertCount > 0 && (
+            <div className="mt-3 border border-red-300/45 bg-red-500/18 px-4 py-3 text-sm font-semibold text-red-50">
+              Red alert active. Every 3 incidents escalates the attempt; the third red alert closes the test and records zero marks.
+            </div>
+          )}
         </div>
 
         <div className="grid min-h-0 overflow-hidden grid-cols-1 lg:grid-cols-[18rem_minmax(24rem,0.95fr)_minmax(28rem,1.05fr)]">
@@ -609,7 +689,7 @@ Output: ${JSON.stringify(example.expected)}`}
                   <button
                     type="button"
                     onClick={() => guardedRunCoding()}
-                    disabled={!harnessSecure}
+                    disabled={!harnessSecure || testTerminated}
                     className="inline-flex h-9 items-center gap-2 border border-white/10 bg-white/[0.07] px-3 text-xs font-semibold text-white transition-colors hover:bg-white/12 disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <Play className="h-3.5 w-3.5" />
@@ -618,7 +698,7 @@ Output: ${JSON.stringify(example.expected)}`}
                   <button
                     type="button"
                     onClick={demoFillAndSubmit}
-                    disabled={!harnessSecure || activeLanguageId !== "python" || !selectedProblem || !demoSolutions[selectedProblem.problem_id]}
+                    disabled={!harnessSecure || testTerminated || activeLanguageId !== "python" || !selectedProblem || !demoSolutions[selectedProblem.problem_id]}
                     className="inline-flex h-9 items-center gap-2 border border-emerald-200/35 bg-emerald-300/15 px-3 text-xs font-semibold text-emerald-100 transition-colors hover:bg-emerald-300/25 disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <FileCode2 className="h-3.5 w-3.5" />
@@ -627,7 +707,7 @@ Output: ${JSON.stringify(example.expected)}`}
                   <button
                     type="button"
                     onClick={() => guardedRunCoding()}
-                    disabled={!harnessSecure}
+                    disabled={!harnessSecure || testTerminated}
                     className="inline-flex h-9 items-center gap-2 bg-white px-3 text-xs font-semibold text-black transition-colors hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <Send className="h-3.5 w-3.5" />
@@ -646,9 +726,9 @@ Output: ${JSON.stringify(example.expected)}`}
                   language={activeMonacoLanguage}
                   theme="vs-dark"
                   value={code}
-                  options={{ ...secureEditorOptions, readOnly: !harnessSecure, domReadOnly: !harnessSecure }}
+                  options={{ ...secureEditorOptions, readOnly: !harnessSecure || testTerminated, domReadOnly: !harnessSecure || testTerminated }}
                   onChange={(value) => {
-                    if (harnessSecure) setCode(value ?? "");
+                    if (harnessSecure && !testTerminated) setCode(value ?? "");
                   }}
                   loading={<div className="flex h-full items-center justify-center text-sm text-white/45">Loading editor...</div>}
                 />
