@@ -77,6 +77,9 @@ class CodingHarnessService:
                 "camera_not_active",
                 "copy_paste_attempt",
                 "copy_paste_not_blocked",
+                "face_not_detected",
+                "face_off_center",
+                "multiple_faces",
                 "hf_multiple_people_visible",
                 "hf_no_person_visible",
                 "hf_phone_visible",
@@ -161,6 +164,8 @@ class CodingHarnessService:
                 flags.append("screen_share_ended")
             elif event_type in {"camera_ended"}:
                 flags.append("camera_ended")
+            elif event_type in {"face_not_detected", "face_off_center", "multiple_faces"}:
+                flags.append(event_type)
             elif event_type.startswith("hf_"):
                 flags.append(event_type)
         return list(dict.fromkeys(flags))

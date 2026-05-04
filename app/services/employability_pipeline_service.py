@@ -276,8 +276,10 @@ class EmployabilityPipelineService:
         weights = {
             "tab_switch": 7.0,
             "face_not_detected": 6.0,
+            "face_off_center": 8.0,
             "multiple_faces": 14.0,
             "phone_detected": 18.0,
+            "phone_visible": 18.0,
             "copy_paste": 4.0,
         }
         event_counts: dict[str, int] = defaultdict(int)

@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { Camera, CheckCircle2, ChevronRight, CopyX, ExternalLink, FileCode2, Maximize2, MonitorUp, Play, RotateCcw, Send, ShieldAlert, ShieldCheck, Terminal, XCircle } from "lucide-react";
 import type { CodingProblem, CodingProctoringEvent, CodingProctoringPayload, CodingSubmissionResponse, ProctoringFrameAnalysisResponse } from "@/app/lib/api";
 import { HARNESS_APP_URL } from "@/app/lib/api";
+import { createLocalFaceProctor } from "@/app/lib/proctoringVision";
 
 interface CodingHarnessWorkspaceProps {
   adaptiveFocusSkills?: string[];
@@ -362,22 +363,34 @@ export default function CodingHarnessWorkspace({
     if (!harnessSecure || !cameraStream) return;
     let cancelled = false;
     let busy = false;
+    let lastHfAnalysis = 0;
+    let localProctor: Awaited<ReturnType<typeof createLocalFaceProctor>> | null = null;
 
     const analyzeCameraFrame = async () => {
       const video = cameraVideoRef.current;
       if (!video || video.readyState < 2 || busy) return;
       busy = true;
       try {
-        const canvas = document.createElement("canvas");
-        canvas.width = 320;
-        canvas.height = Math.max(1, Math.round((video.videoHeight / Math.max(video.videoWidth, 1)) * 320));
-        const context = canvas.getContext("2d");
-        if (!context) return;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const analysis = await analyzeProctoringFrame(canvas.toDataURL("image/jpeg", 0.72));
+        localProctor ??= await createLocalFaceProctor();
+        const localAnalysis = localProctor.analyze(video);
         if (cancelled) return;
-        setHfInsight(analysis.reason);
-        analysis.flags.forEach((flag) => recordEvent(`hf_${flag}`, Math.max(analysis.risk_score, 0.7)));
+        setHfInsight(localAnalysis.reason);
+        localAnalysis.flags.forEach((flag) => recordEvent(flag, flag === "face_off_center" ? 0.75 : 0.95));
+
+        const now = Date.now();
+        if (now - lastHfAnalysis >= 20000) {
+          lastHfAnalysis = now;
+          const canvas = document.createElement("canvas");
+          canvas.width = 320;
+          canvas.height = Math.max(1, Math.round((video.videoHeight / Math.max(video.videoWidth, 1)) * 320));
+          const context = canvas.getContext("2d");
+          if (!context) return;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const analysis = await analyzeProctoringFrame(canvas.toDataURL("image/jpeg", 0.72));
+          if (cancelled) return;
+          if (analysis.flags.length > 0 || !localAnalysis.flags.length) setHfInsight(analysis.reason);
+          analysis.flags.forEach((flag) => recordEvent(`hf_${flag}`, Math.max(analysis.risk_score, 0.7)));
+        }
       } catch (error) {
         if (!cancelled) setHfInsight(error instanceof Error ? error.message : "AI proctoring check could not run.");
       } finally {
@@ -386,9 +399,10 @@ export default function CodingHarnessWorkspace({
     };
 
     void analyzeCameraFrame();
-    const interval = window.setInterval(() => void analyzeCameraFrame(), 20000);
+    const interval = window.setInterval(() => void analyzeCameraFrame(), 5000);
     return () => {
       cancelled = true;
+      localProctor?.close();
       window.clearInterval(interval);
     };
   }, [analyzeProctoringFrame, cameraStream, harnessSecure, recordEvent]);
