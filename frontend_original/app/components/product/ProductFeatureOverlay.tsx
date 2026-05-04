@@ -160,8 +160,12 @@ const ProductFeatureOverlay = () => {
     setState((current) => ({ ...current, session: undefined }));
   };
 
-  const isMissingStudentError = (error: unknown) => {
-    return error instanceof ApiError && error.status === 404 && error.detail === "Student not found";
+  const isRecoverableSessionError = (error: unknown) => {
+    return (
+      error instanceof ApiError &&
+      ((error.status === 404 && error.detail === "Student not found") ||
+        (error.status === 401 && error.detail === "Invalid or expired access token"))
+    );
   };
 
   const starterForLanguage = (problem: CodingProblem, language: string) => {
@@ -196,12 +200,12 @@ const ProductFeatureOverlay = () => {
     return createDemoSession();
   };
 
-  const runWithFreshSessionOnMissingStudent = async <T,>(action: (session: DemoSession) => Promise<T>) => {
+  const runWithFreshSessionOnRecoverableSessionError = async <T,>(action: (session: DemoSession) => Promise<T>) => {
     const session = await ensureSession();
     try {
       return await action(session);
     } catch (error) {
-      if (!isMissingStudentError(error)) throw error;
+      if (!isRecoverableSessionError(error)) throw error;
       resetDemoSession();
       const freshSession = await createDemoSession();
       return action(freshSession);
@@ -291,7 +295,7 @@ const ProductFeatureOverlay = () => {
   };
 
   const runGithub = () => runAction("Connecting GitHub", async () => {
-    await runWithFreshSessionOnMissingStudent((session) => connectGithubWithSession(session));
+    await runWithFreshSessionOnRecoverableSessionError((session) => connectGithubWithSession(session));
   });
 
   const loadProblems = async () => {
