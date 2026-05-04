@@ -16,8 +16,10 @@ interface CodingHarnessWorkspaceProps {
   onSelectProblem: (problem: CodingProblem) => void;
   problems: CodingProblem[];
   runCoding: (proctoring?: CodingProctoringPayload, codeOverride?: string) => void;
+  selectedLanguage: string;
   selectedProblemId: string;
   setCode: (code: string) => void;
+  setSelectedLanguage: (language: string) => void;
   status: string;
   submission?: CodingSubmissionResponse;
 }
@@ -46,7 +48,15 @@ const secureEditorOptions = {
   contextmenu: false,
 };
 
-const hfModelLabel = process.env.NEXT_PUBLIC_HF_PROCTORING_MODEL ?? "Hugging Face vision proctor hook";
+const hfModelLabel = process.env.NEXT_PUBLIC_HF_PROCTORING_MODEL ?? "MediaPipe face + Hugging Face object proctor";
+
+const defaultLanguageOptions = [
+  { id: "python", label: "Python", monaco_language: "python" },
+  { id: "java", label: "Java", monaco_language: "java" },
+  { id: "c", label: "C", monaco_language: "c" },
+  { id: "cpp", label: "C++", monaco_language: "cpp" },
+  { id: "javascript", label: "JavaScript", monaco_language: "javascript" },
+];
 
 const demoSolutions: Record<string, string> = {
   two_sum_indices: `def solve(nums, target):
@@ -158,8 +168,10 @@ export default function CodingHarnessWorkspace({
   onSelectProblem,
   problems,
   runCoding,
+  selectedLanguage,
   selectedProblemId,
   setCode,
+  setSelectedLanguage,
   status,
   submission,
 }: CodingHarnessWorkspaceProps) {
@@ -175,6 +187,10 @@ export default function CodingHarnessWorkspace({
   const [hfInsight, setHfInsight] = useState("AI proctor waits for secure camera mode.");
   const [events, setEvents] = useState<Record<string, CodingProctoringEvent>>({});
   const selectedProblem = problems.find((problem) => problem.problem_id === selectedProblemId) ?? problems[0];
+  const languageOptions = selectedProblem?.supported_languages?.length ? selectedProblem.supported_languages : defaultLanguageOptions;
+  const activeLanguage = languageOptions.find((language) => language.id === selectedLanguage) ?? languageOptions[0];
+  const activeLanguageId = activeLanguage?.id ?? "python";
+  const activeMonacoLanguage = activeLanguage?.monaco_language ?? "python";
   const publicResults = submission?.public_results ?? [];
   const hiddenTotal = submission?.hidden_total_count ?? 0;
   const hiddenPassed = submission?.hidden_passed_count ?? 0;
@@ -275,6 +291,10 @@ export default function CodingHarnessWorkspace({
 
   const demoFillAndSubmit = () => {
     if (!selectedProblem) return;
+    if (activeLanguageId !== "python") {
+      setProctoringError("Demo auto-submit is available for Python. Use Run or Submit for this language.");
+      return;
+    }
     const solution = demoSolutions[selectedProblem.problem_id];
     if (!solution) {
       setProctoringError("No demo solution is available for this problem yet.");
@@ -394,7 +414,7 @@ export default function CodingHarnessWorkspace({
             </div>
             <div>
               <div className="text-sm font-semibold text-white">Interview Harness</div>
-              <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/42">Python · Hidden tests · Trust evidence</div>
+              <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/42">Java / C / C++ / Python / JavaScript · Hidden tests</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -556,8 +576,20 @@ Output: ${JSON.stringify(example.expected)}`}
             <div className="grid min-h-0 grid-rows-[auto_1fr]">
               <div className="flex items-center justify-between border-b border-white/10 bg-[#11141c] px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <span className="border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-white">Python</span>
-                  <span className="text-xs text-white/38">starter code only</span>
+                  <select
+                    value={activeLanguageId}
+                    onChange={(event) => setSelectedLanguage(event.target.value)}
+                    className="h-9 min-w-[8.5rem] border border-white/10 bg-[#181c26] px-3 text-xs font-semibold text-white outline-none"
+                  >
+                    {languageOptions.map((language) => (
+                      <option key={language.id} value={language.id} className="bg-[#11141c] text-white">
+                        {language.label}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-xs text-white/38">
+                    {activeLanguageId === "python" ? "local fallback enabled" : "Judge0 required"}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -572,7 +604,7 @@ Output: ${JSON.stringify(example.expected)}`}
                   <button
                     type="button"
                     onClick={demoFillAndSubmit}
-                    disabled={!harnessSecure || !selectedProblem || !demoSolutions[selectedProblem.problem_id]}
+                    disabled={!harnessSecure || activeLanguageId !== "python" || !selectedProblem || !demoSolutions[selectedProblem.problem_id]}
                     className="inline-flex h-9 items-center gap-2 border border-emerald-200/35 bg-emerald-300/15 px-3 text-xs font-semibold text-emerald-100 transition-colors hover:bg-emerald-300/25 disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <FileCode2 className="h-3.5 w-3.5" />
@@ -597,7 +629,7 @@ Output: ${JSON.stringify(example.expected)}`}
                 )}
                 <Editor
                   height="100%"
-                  language="python"
+                  language={activeMonacoLanguage}
                   theme="vs-dark"
                   value={code}
                   options={{ ...secureEditorOptions, readOnly: !harnessSecure, domReadOnly: !harnessSecure }}

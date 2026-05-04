@@ -50,6 +50,33 @@ def test_coding_problem_catalog_hides_answer_keys_and_hidden_cases(tmp_path):
     assert all("solution" not in problem for problem in payload)
 
 
+def test_coding_problem_catalog_exposes_five_supported_languages(tmp_path):
+    app = create_app(
+        {
+            "database_url": f"sqlite:///{tmp_path / 'coding-languages.db'}",
+            "auth_secret_key": "test-secret",
+        }
+    )
+    client = TestClient(app)
+
+    response = client.get("/api/v1/coding/problems")
+
+    assert response.status_code == 200
+    problem = response.json()[0]
+    assert [language["id"] for language in problem["supported_languages"]] == [
+        "python",
+        "java",
+        "c",
+        "cpp",
+        "javascript",
+    ]
+    assert set(problem["starter_code_by_language"]) == {"python", "java", "c", "cpp", "javascript"}
+    assert problem["starter_code"] == problem["starter_code_by_language"]["python"]
+    assert "function solve(nums, target)" in problem["starter_code_by_language"]["javascript"]
+    assert "Input JSON:" in problem["starter_code_by_language"]["java"]
+    assert problem["title"] in problem["starter_code_by_language"]["cpp"]
+
+
 def test_student_can_submit_python_solution_against_public_and_hidden_tests(tmp_path):
     app = create_app(
         {
@@ -93,6 +120,32 @@ def solve(nums, target):
     summary = client.get(f"/api/v1/students/{student_id}/evidence", headers=headers)
     assert summary.status_code == 200
     assert summary.json()["coding_harness"]["solved_count"] == 1
+
+
+def test_non_python_submission_requires_judge0_execution(tmp_path):
+    app = create_app(
+        {
+            "database_url": f"sqlite:///{tmp_path / 'coding-local-language.db'}",
+            "auth_secret_key": "test-secret",
+        }
+    )
+    client = TestClient(app)
+    student_id, headers = _student(client)
+
+    response = client.post(
+        f"/api/v1/students/{student_id}/coding/submissions",
+        headers=headers,
+        json={
+            "problem_id": "two_sum_indices",
+            "language": "javascript",
+            "code": "function solve(nums, target) { return [0, 1]; }",
+            "proctoring_checks": PROCTORING_CHECKS,
+            "proctoring_events": [],
+        },
+    )
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == "JavaScript submissions require Judge0 to be configured"
 
 
 def test_coding_submission_requires_secure_proctoring_state(tmp_path):
@@ -263,4 +316,66 @@ def test_coding_submission_uses_judge0_when_configured(tmp_path, monkeypatch):
     assert response.status_code == 201
     assert calls
     assert calls[0][0] == "http://judge0.local/submissions?wait=true"
+    assert response.json()["passed"] is True
+
+
+def test_javascript_submission_uses_judge0_language_and_runner(tmp_path, monkeypatch):
+    app = create_app(
+        {
+            "database_url": f"sqlite:///{tmp_path / 'coding-judge0-js.db'}",
+            "auth_secret_key": "test-secret",
+            "judge0_base_url": "http://judge0.local",
+        }
+    )
+    client = TestClient(app)
+    student_id, headers = _student(client)
+    submissions = []
+
+    class FakeJudge0Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, traceback):
+            return False
+
+        def read(self):
+            return b'{"stdout":"{\\"passed\\": true, \\"actual\\": [0, 1]}\\n","status":{"description":"Accepted"}}'
+
+    def fake_urlopen(request, timeout):
+        submissions.append(json_body(request.data))
+        return FakeJudge0Response()
+
+    def json_body(data):
+        import json
+
+        return json.loads(data.decode("utf-8"))
+
+    monkeypatch.setattr("app.services.coding_service.urllib.request.urlopen", fake_urlopen)
+
+    response = client.post(
+        f"/api/v1/students/{student_id}/coding/submissions",
+        headers=headers,
+        json={
+            "problem_id": "two_sum_indices",
+            "language": "javascript",
+            "code": """
+function solve(nums, target) {
+  const seen = new Map();
+  for (let index = 0; index < nums.length; index += 1) {
+    const need = target - nums[index];
+    if (seen.has(need)) return [seen.get(need), index];
+    seen.set(nums[index], index);
+  }
+  return [];
+}
+""",
+            "proctoring_checks": PROCTORING_CHECKS,
+            "proctoring_events": [],
+        },
+    )
+
+    assert response.status_code == 201
+    assert submissions
+    assert submissions[0]["language_id"] == 63
+    assert "JSON.stringify" in submissions[0]["source_code"]
     assert response.json()["passed"] is True

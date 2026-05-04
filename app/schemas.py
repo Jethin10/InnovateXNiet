@@ -178,6 +178,12 @@ class CodingExampleResponse(BaseModel):
     expected: object
 
 
+class CodingLanguageResponse(BaseModel):
+    id: str
+    label: str
+    monaco_language: str
+
+
 class CodingProblemResponse(BaseModel):
     problem_id: str
     title: str
@@ -186,6 +192,8 @@ class CodingProblemResponse(BaseModel):
     statement: str
     function_name: str
     starter_code: str
+    starter_code_by_language: dict[str, str]
+    supported_languages: list[CodingLanguageResponse]
     examples: list[CodingExampleResponse]
 
 

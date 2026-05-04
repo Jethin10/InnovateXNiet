@@ -16,12 +16,23 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.config import Settings
-from app.coding.problem_bank import DEFAULT_CODING_PROBLEM_BANK, CodingProblem, CodingTestCase
+from app.coding.problem_bank import DEFAULT_CODING_PROBLEM_BANK, SUPPORTED_CODING_LANGUAGES, CodingProblem, CodingTestCase
 from app.db.models import EvidenceVerificationRecord, StudentProfile
 from app.schemas import CodingSubmissionRequest, CodingSubmissionResponse, CodingTestResultResponse
 
 
 BLOCKED_CALLS = {"open", "eval", "exec", "compile", "__import__", "input", "globals", "locals"}
+SUPPORTED_LANGUAGE_IDS = {language["id"] for language in SUPPORTED_CODING_LANGUAGES}
+LANGUAGE_ALIASES = {
+    "py": "python",
+    "python3": "python",
+    "js": "javascript",
+    "node": "javascript",
+    "nodejs": "javascript",
+    "c++": "cpp",
+    "cplusplus": "cpp",
+}
+LANGUAGE_LABELS = {language["id"]: language["label"] for language in SUPPORTED_CODING_LANGUAGES}
 
 
 class CodingHarnessService:
@@ -38,15 +49,21 @@ class CodingHarnessService:
         student = self.session.get(StudentProfile, student_id)
         if student is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
-        if request.language.lower() != "python":
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Only Python is supported in v1")
+        language = self._normalize_language(request.language)
 
         try:
             problem = DEFAULT_CODING_PROBLEM_BANK.require(request.problem_id)
         except KeyError as exc:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Coding problem not found") from exc
 
-        integrity_flags = self._validate_code(request.code, problem)
+        if language != "python" and not (self.settings and self.settings.judge0_base_url):
+            label = LANGUAGE_LABELS[language]
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"{label} submissions require Judge0 to be configured",
+            )
+
+        integrity_flags = self._validate_code(request.code, problem) if language == "python" else self._validate_text_code(request.code, problem)
         if integrity_flags:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=integrity_flags[0])
         proctoring_flags = self._proctoring_flags(request)
@@ -68,8 +85,8 @@ class CodingHarnessService:
         if blocking_flags:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=blocking_flags[0])
 
-        public_results = self._run_cases(request.code, problem, problem.public_cases, include_details=True)
-        hidden_results = self._run_cases(request.code, problem, problem.hidden_cases, include_details=False)
+        public_results = self._run_cases(request.code, language, problem, problem.public_cases, include_details=True)
+        hidden_results = self._run_cases(request.code, language, problem, problem.hidden_cases, include_details=False)
         passed_public = sum(1 for result in public_results if result.passed)
         passed_hidden = sum(1 for result in hidden_results if result.passed)
         total_cases = len(public_results) + len(hidden_results)
@@ -83,6 +100,7 @@ class CodingHarnessService:
                 "submission_id": submission_id,
                 "problem_id": problem.problem_id,
                 "title": problem.title,
+                "language": language,
                 "passed": passed,
                 "score": score,
                 "skill_tags": list(problem.skill_tags),
@@ -103,6 +121,17 @@ class CodingHarnessService:
             integrity_flags=proctoring_flags,
             skill_tags=list(problem.skill_tags),
         )
+
+    def _normalize_language(self, language: str) -> str:
+        normalized = language.strip().lower().replace(" ", "")
+        normalized = LANGUAGE_ALIASES.get(normalized, normalized)
+        if normalized not in SUPPORTED_LANGUAGE_IDS:
+            supported = ", ".join(language["label"] for language in SUPPORTED_CODING_LANGUAGES)
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Unsupported language. Choose one of: {supported}",
+            )
+        return normalized
 
     def _proctoring_flags(self, request: CodingSubmissionRequest) -> list[str]:
         checks = request.proctoring_checks or {}
@@ -156,9 +185,15 @@ class CodingHarnessService:
             return [f"Submission must define {problem.function_name}"]
         return []
 
+    def _validate_text_code(self, code: str, problem: CodingProblem) -> list[str]:
+        if problem.function_name not in code:
+            return [f"Submission must define {problem.function_name}"]
+        return []
+
     def _run_cases(
         self,
         code: str,
+        language: str,
         problem: CodingProblem,
         cases: tuple[CodingTestCase, ...],
         *,
@@ -166,7 +201,7 @@ class CodingHarnessService:
     ) -> list[CodingTestResultResponse]:
         results: list[CodingTestResultResponse] = []
         for case in cases:
-            raw = self._run_single_case(code, problem.function_name, case)
+            raw = self._run_single_case(code, language, problem, case)
             passed = raw.get("passed", False)
             results.append(
                 CodingTestResultResponse(
@@ -180,29 +215,16 @@ class CodingHarnessService:
             )
         return results
 
-    def _run_single_case(self, code: str, function_name: str, case: CodingTestCase) -> dict[str, Any]:
+    def _run_single_case(self, code: str, language: str, problem: CodingProblem, case: CodingTestCase) -> dict[str, Any]:
         if self.settings and self.settings.judge0_base_url:
-            return self._run_single_case_with_judge0(code, function_name, case)
-        return self._run_single_case_locally(code, function_name, case)
+            return self._run_single_case_with_judge0(code, language, problem, case)
+        return self._run_single_case_locally(code, problem.function_name, case)
 
-    def _run_single_case_with_judge0(self, code: str, function_name: str, case: CodingTestCase) -> dict[str, Any]:
+    def _run_single_case_with_judge0(self, code: str, language: str, problem: CodingProblem, case: CodingTestCase) -> dict[str, Any]:
         assert self.settings is not None
-        runner = textwrap.dedent(
-            f"""
-            import json
-
-            {code}
-
-            payload = {json.dumps({"input": case.input, "expected": case.expected})}
-            try:
-                actual = {function_name}(**payload["input"])
-                print(json.dumps({{"passed": actual == payload["expected"], "actual": actual}}))
-            except Exception as exc:
-                print(json.dumps({{"passed": False, "error": str(exc)}}))
-            """
-        ).strip()
+        runner = self._build_judge0_runner(code, language, problem, case)
         payload = {
-            "language_id": self.settings.judge0_python_language_id,
+            "language_id": self._judge0_language_id(language),
             "source_code": runner,
             "stdin": "",
             "cpu_time_limit": 2,
@@ -245,6 +267,117 @@ class CodingHarnessService:
             return json.loads(stdout.splitlines()[-1])
         except json.JSONDecodeError:
             return {"passed": False, "error": "Submission produced invalid output"}
+
+    def _judge0_language_id(self, language: str) -> int:
+        assert self.settings is not None
+        return {
+            "c": self.settings.judge0_c_language_id,
+            "cpp": self.settings.judge0_cpp_language_id,
+            "java": self.settings.judge0_java_language_id,
+            "javascript": self.settings.judge0_javascript_language_id,
+            "python": self.settings.judge0_python_language_id,
+        }[language]
+
+    def _build_judge0_runner(self, code: str, language: str, problem: CodingProblem, case: CodingTestCase) -> str:
+        payload = json.dumps({"input": case.input, "expected": case.expected})
+        expected_json = json.dumps(case.expected, separators=(",", ":"))
+        if language == "python":
+            return textwrap.dedent(
+                f"""
+                import json
+
+                {code}
+
+                payload = {payload}
+                try:
+                    actual = {problem.function_name}(**payload["input"])
+                    print(json.dumps({{"passed": actual == payload["expected"], "actual": actual}}))
+                except Exception as exc:
+                    print(json.dumps({{"passed": False, "error": str(exc)}}))
+                """
+            ).strip()
+        if language == "javascript":
+            args = ", ".join(json.dumps(value) for value in case.input.values())
+            return textwrap.dedent(
+                f"""
+                {code}
+
+                const expected = {json.dumps(case.expected)};
+                try {{
+                  const actual = {problem.function_name}({args});
+                  console.log(JSON.stringify({{
+                    passed: JSON.stringify(actual) === JSON.stringify(expected),
+                    actual
+                  }}));
+                }} catch (error) {{
+                  console.log(JSON.stringify({{ passed: false, error: String(error && error.message ? error.message : error) }}));
+                }}
+                """
+            ).strip()
+        if language == "java":
+            return textwrap.dedent(
+                f"""
+                {code}
+
+                public class Main {{
+                    public static void main(String[] args) {{
+                        String input = {json.dumps(payload)};
+                        String expected = {json.dumps(expected_json)};
+                        try {{
+                            String actual = Solution.solve(input);
+                            boolean passed = actual != null && actual.trim().equals(expected);
+                            System.out.println("{{\\\"passed\\\":" + passed + ",\\\"actual\\\":" + jsonString(actual) + "}}");
+                        }} catch (Exception exc) {{
+                            System.out.println("{{\\\"passed\\\":false,\\\"error\\\":" + jsonString(exc.getMessage()) + "}}");
+                        }}
+                    }}
+
+                    private static String jsonString(String value) {{
+                        if (value == null) return "null";
+                        return "\\\"" + value.replace("\\\\", "\\\\\\\\").replace("\\\"", "\\\\\\\"") + "\\\"";
+                    }}
+                }}
+                """
+            ).strip()
+        if language == "cpp":
+            return textwrap.dedent(
+                f"""
+                {code}
+
+                #include <iostream>
+                int main() {{
+                    std::string input = {json.dumps(payload)};
+                    std::string expected = {json.dumps(expected_json)};
+                    try {{
+                        std::string actual = solve(input);
+                        bool passed = actual == expected;
+                        std::cout << "{{\\\"passed\\\":" << (passed ? "true" : "false") << "}}" << std::endl;
+                    }} catch (...) {{
+                        std::cout << "{{\\\"passed\\\":false,\\\"error\\\":\\\"Runtime error\\\"}}" << std::endl;
+                    }}
+                    return 0;
+                }}
+                """
+            ).strip()
+        if language == "c":
+            return textwrap.dedent(
+                f"""
+                #include <stdio.h>
+                #include <string.h>
+
+                {code}
+
+                int main(void) {{
+                    const char* input = {json.dumps(payload)};
+                    const char* expected = {json.dumps(expected_json)};
+                    const char* actual = solve(input);
+                    int passed = actual != NULL && strcmp(actual, expected) == 0;
+                    printf("{{\\\"passed\\\":%s}}\\n", passed ? "true" : "false");
+                    return 0;
+                }}
+                """
+            ).strip()
+        raise ValueError(f"Unsupported language: {language}")
 
     def _run_single_case_locally(self, code: str, function_name: str, case: CodingTestCase) -> dict[str, Any]:
         with tempfile.TemporaryDirectory() as tmp:
