@@ -8,6 +8,8 @@ import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { TriangleGeometry } from './Triangle';
 
+export const PORTAL_CLOSE_EVENT = 'trust-flow-close-portal';
+
 interface GridTileProps {
   id: string;
   title: string;
@@ -125,6 +127,18 @@ const GridTile = (props: GridTileProps) => {
     })
     document.body.removeEventListener('keydown', handleEscape);
   }
+
+  useEffect(() => {
+    const handlePortalClose = (event: Event) => {
+      const portalId = (event as CustomEvent<{ id?: string }>).detail?.id;
+      if (portalId === id) exitPortal(true);
+    };
+
+    window.addEventListener(PORTAL_CLOSE_EVENT, handlePortalClose);
+    return () => {
+      window.removeEventListener(PORTAL_CLOSE_EVENT, handlePortalClose);
+    };
+  });
 
   const fontProps: Partial<TextProps> = {
     font: "./soria-font.ttf",

@@ -6,6 +6,7 @@ import { apiRequest, SkillRoadmapItem, SkillRoadmapResponse } from "@/app/lib/ap
 import { Timeline } from "@/components/ui/timeline";
 import type { TimelineEntry } from "@/components/ui/timeline";
 import { useFeatureStore, usePortalStore } from "@stores";
+import { PORTAL_CLOSE_EVENT } from "../GridTile";
 
 const ADAPTIVE_CODING_TEST_KEY = "placement-trust-adaptive-coding-test";
 
@@ -42,12 +43,7 @@ const TrustFlowSceneOverlay = () => {
   const firstItem = roadmap?.roadmap[0] ?? null;
 
   const goBack = () => {
-    const closeButton = document.querySelector<HTMLElement>(".close");
-    if (closeButton) {
-      closeButton.click();
-      return;
-    }
-
+    window.dispatchEvent(new CustomEvent(PORTAL_CLOSE_EVENT, { detail: { id: "work" } }));
     setActivePortal(null);
   };
 
