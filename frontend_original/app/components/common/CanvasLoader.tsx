@@ -12,6 +12,7 @@ import { usePortalStore, useThemeStore } from "@stores";
 
 import AccountDock from "./AccountDock";
 import GateLoginOverlay from "./GateLoginOverlay";
+import GuidebookOverlay from "./GuidebookOverlay";
 import Preloader from "./Preloader";
 import ProgressLoader from "./ProgressLoader";
 import { ScrollHint } from "./ScrollHint";
@@ -107,6 +108,7 @@ const CanvasLoader = (props: { children: React.ReactNode }) => {
       <ThemeSwitcher />
       <ScrollHint />
       <AccountDock />
+      <GuidebookOverlay />
       <TrustFlowSceneOverlay />
       <ProductFeatureOverlay />
       <GateLoginOverlay />

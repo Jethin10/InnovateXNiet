@@ -153,13 +153,22 @@ const ProductFeatureOverlay = () => {
     });
   };
 
+  const resetDemoSession = () => {
+    if (typeof window !== "undefined") {
+      window.sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    }
+    setState((current) => ({ ...current, session: undefined }));
+  };
+
+  const isMissingStudentError = (error: unknown) => {
+    return error instanceof ApiError && error.status === 404 && error.detail === "Student not found";
+  };
+
   const starterForLanguage = (problem: CodingProblem, language: string) => {
     return codingStarterForLanguage(problem, language);
   };
 
-  const ensureSession = async () => {
-    if (state.session) return state.session;
-
+  const createDemoSession = async () => {
     const seed = Date.now();
     const email = `feature.student.${seed}@trust.local`;
     const password = "Placement123";
@@ -180,6 +189,23 @@ const ProductFeatureOverlay = () => {
     const session = { studentId: student.student_id, token: login.access_token, stampSlug: null };
     patchState({ session });
     return session;
+  };
+
+  const ensureSession = async () => {
+    if (state.session) return state.session;
+    return createDemoSession();
+  };
+
+  const runWithFreshSessionOnMissingStudent = async <T,>(action: (session: DemoSession) => Promise<T>) => {
+    const session = await ensureSession();
+    try {
+      return await action(session);
+    } catch (error) {
+      if (!isMissingStudentError(error)) throw error;
+      resetDemoSession();
+      const freshSession = await createDemoSession();
+      return action(freshSession);
+    }
   };
 
   const runAction = async (label: string, action: () => Promise<void>) => {
@@ -249,8 +275,7 @@ const ProductFeatureOverlay = () => {
     patchState({ resume, ats });
   });
 
-  const runGithub = () => runAction("Connecting GitHub", async () => {
-    const session = await ensureSession();
+  const connectGithubWithSession = async (session: DemoSession) => {
     const accessToken = githubTokenRef.current?.value.trim() || null;
     const github = await apiRequest<GitHubEvidenceResponse>(`/api/v1/students/${session.studentId}/evidence/github`, {
       method: "POST",
@@ -263,6 +288,10 @@ const ProductFeatureOverlay = () => {
     });
     if (githubTokenRef.current) githubTokenRef.current.value = "";
     patchState({ github });
+  };
+
+  const runGithub = () => runAction("Connecting GitHub", async () => {
+    await runWithFreshSessionOnMissingStudent((session) => connectGithubWithSession(session));
   });
 
   const loadProblems = async () => {
